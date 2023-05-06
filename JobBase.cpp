@@ -1,10 +1,25 @@
 #include "JobBase.h"
 
+#include <iostream>
 
 
 
 
 
+bool JobBase::isValid() const
+{
+    if (!std::filesystem::exists(m_targetDirectory)) {
+        std::cerr << "! Error! Specified directory doesn't exist (" << m_targetDirectory << ")" << std::endl;
+        return false;
+    }
+
+    if (!std::filesystem::is_directory(m_targetDirectory)) {
+        std::cerr << "! Error! Specified path is not a directory! (" << m_targetDirectory << ")" << std::endl;
+        return false;
+    }
+
+    return true;
+}
 
 // ========== Setters and Getters ==========
 JobType JobBase::getType() const {
