@@ -4,10 +4,12 @@
 
 
 
-
-
 bool JobBase::isValid() const
 {
+    if (m_targetDirectory.string() == "") {
+        std::cerr << "! Error! No directory specified!" << std::endl;
+        return false;
+    }
     if (!std::filesystem::exists(m_targetDirectory)) {
         std::cerr << "! Error! Specified directory doesn't exist (" << m_targetDirectory << ")" << std::endl;
         return false;
