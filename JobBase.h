@@ -29,6 +29,9 @@ protected:
     bool m_isFinished;
     std::string m_log;
 
+    const std::string LOG_DIRECTORY = "logs";
+    void createLogDirectory() const;
+
 public: 
     // ========== Setters and Getters ==========
     JobType getType() const;

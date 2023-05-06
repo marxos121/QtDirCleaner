@@ -1,6 +1,9 @@
 #include "JobBase.h"
 
+#include <sstream>
 #include <iostream>
+#include <fstream>
+#include <chrono>
 
 
 JobBase::JobBase(JobType l_type)
@@ -14,6 +17,20 @@ JobBase::JobBase(JobType l_type, std::istream& is)
     readIn(is);
 }
 
+
+void JobBase::saveLog() const
+{
+    const std::chrono::time_point now{ std::chrono::system_clock::now() };
+    const std::chrono::year_month_day ymd{ std::chrono::floor<std::chrono::days>(now) };
+    const std::chrono::hh_mm_ss hhmmss{ std::chrono::floor<std::chrono::milliseconds>(now -
+        std::chrono::floor<std::chrono::days>(now)) };
+    
+    std::stringstream logname;
+    logname << ymd << " " << hhmmss.hours() << "-" << hhmmss.minutes() << "-" << hhmmss.seconds();
+    std::ofstream m_file(LOG_DIRECTORY + "/" + logname.str() + ".dlog");
+    m_file << m_log;
+    m_file.close();
+}
 
 bool JobBase::isValid() const
 {
@@ -32,6 +49,14 @@ bool JobBase::isValid() const
     }
 
     return true;
+}
+
+void JobBase::createLogDirectory() const
+{
+    if (std::filesystem::exists(LOG_DIRECTORY)) {
+        return;
+    }
+    std::filesystem::create_directory(LOG_DIRECTORY);
 }
 
 // ========== Setters and Getters ==========
