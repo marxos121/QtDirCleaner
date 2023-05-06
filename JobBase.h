@@ -21,7 +21,7 @@ public:
     virtual void execute() = 0;
 
 protected:
-	std::filesystem::path m_targetDir;
+	std::filesystem::path m_targetDirectory;
 	std::unordered_set<std::string> m_targetExtensions;
     std::unordered_set<std::string> m_exemptFiles;
 
@@ -30,7 +30,7 @@ protected:
     std::string m_log;
 
 public: 
-    //Setters and getters
+    // ========== Setters and Getters ==========
     JobType getType() const;
     const std::string& getLog() const;
 
