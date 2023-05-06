@@ -11,7 +11,7 @@ enum JobType {
 class JobBase {
 public:
     JobBase(JobType l_type);
-    JobBase(std::istream& is);
+    JobBase(JobType l_type, std::istream& is);
     virtual ~JobBase() = default;
 
     void saveLog() const;
@@ -25,8 +25,8 @@ protected:
 	std::unordered_set<std::string> m_targetExtensions;
     std::unordered_set<std::string> m_exemptFiles;
 
-    bool m_isFinished;
     const JobType m_type;
+    bool m_isFinished;
     std::string m_log;
 
 public: 

@@ -3,20 +3,31 @@
 #include <iostream>
 
 
+JobBase::JobBase(JobType l_type)
+    :  m_type(l_type), m_isFinished(false)
+{
+}
+
+JobBase::JobBase(JobType l_type, std::istream& is)
+    : m_type(l_type), m_isFinished(false)
+{
+    readIn(is);
+}
+
 
 bool JobBase::isValid() const
 {
-    if (m_targetDirectory.string() == "") {
-        std::cerr << "! Error! No directory specified!" << std::endl;
+    if (m_targetDirectory.string().empty()) {
+        std::cerr << "! Error! No target directory specified!" << std::endl;
         return false;
     }
     if (!std::filesystem::exists(m_targetDirectory)) {
-        std::cerr << "! Error! Specified directory doesn't exist (" << m_targetDirectory << ")" << std::endl;
+        std::cerr << "! Error! Specified target directory doesn't exist (" << m_targetDirectory << ")" << std::endl;
         return false;
     }
 
     if (!std::filesystem::is_directory(m_targetDirectory)) {
-        std::cerr << "! Error! Specified path is not a directory! (" << m_targetDirectory << ")" << std::endl;
+        std::cerr << "! Error! Specified target path is not a directory! (" << m_targetDirectory << ")" << std::endl;
         return false;
     }
 
