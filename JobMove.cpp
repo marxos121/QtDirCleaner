@@ -7,12 +7,6 @@ JobMove::JobMove()
 {
 }
 
-JobMove::JobMove(std::istream& is)
-	: JobBase(JobType::Move)
-{
-	readIn(is);
-}
-
 bool JobMove::isValid() const
 {
 	bool valid = JobBase::isValid();

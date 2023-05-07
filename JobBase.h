@@ -11,16 +11,12 @@ enum JobType {
 class JobBase {
 public:
     JobBase(JobType l_type);
-    JobBase(JobType l_type, std::istream& is);
     virtual ~JobBase() = default;
-
 
     void execute();
 
     void saveLog() const;
     virtual bool isValid() const;
-
-    virtual void readIn(std::istream& is) = 0;
 
 protected:
 	std::filesystem::path m_targetDirectory;

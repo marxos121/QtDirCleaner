@@ -7,16 +7,6 @@ JobRemove::JobRemove()
 {
 }
 
-JobRemove::JobRemove(std::istream& is)
-	: JobBase(JobType::Remove)
-{
-	readIn(is);
-}
-
-void JobRemove::readIn(std::istream& is)
-{
-}
-
 void JobRemove::addHeader()
 {
 	m_log += "========REMOVE JOB STARTED========\n\n";

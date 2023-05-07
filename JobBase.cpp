@@ -11,12 +11,6 @@ JobBase::JobBase(JobType l_type)
 {
 }
 
-JobBase::JobBase(JobType l_type, std::istream& is)
-    : JobBase(l_type)
-{
-    readIn(is);
-}
-
 
 void JobBase::saveLog() const
 {

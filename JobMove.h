@@ -5,10 +5,8 @@
 class JobMove : public JobBase {
 public:
 	JobMove();
-	JobMove(std::istream& is);
 	~JobMove() = default;
 
-	virtual void readIn(std::istream& is) override;
 	virtual bool isValid() const override;
 
 protected:

@@ -5,10 +5,7 @@
 class JobRemove : public JobBase {
 public:
 	JobRemove();
-	JobRemove(std::istream& is);
 	~JobRemove() = default;
-
-	virtual void readIn(std::istream& is) override;
 
 protected:
 	virtual void addHeader() override;
