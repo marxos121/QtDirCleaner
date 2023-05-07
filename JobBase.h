@@ -18,7 +18,7 @@ public:
     virtual bool isValid() const;
 
     virtual void readIn(std::istream& is) = 0;
-    virtual void execute();
+    void execute();
 
 protected:
 	std::filesystem::path m_targetDirectory;
