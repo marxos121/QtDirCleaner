@@ -7,12 +7,12 @@
 
 
 JobBase::JobBase(JobType l_type)
-    :  m_type(l_type), m_isFinished(false)
+    :  m_type(l_type), m_isFinished(false), m_matchingFiles(0), m_processedFiles(0)
 {
 }
 
 JobBase::JobBase(JobType l_type, std::istream& is)
-    : m_type(l_type), m_isFinished(false)
+    : JobBase(l_type)
 {
     readIn(is);
 }
