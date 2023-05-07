@@ -19,7 +19,7 @@ public:
     virtual bool isValid() const;
 
 protected:
-	std::filesystem::path m_targetDirectory;
+	std::unordered_set<std::filesystem::path> m_targetDirectories;
 	std::unordered_set<std::string> m_targetExtensions;
     std::unordered_set<std::string> m_exemptFiles;
 
@@ -49,9 +49,18 @@ public:
     void setFinished(bool l_finished);
     bool getFinished() const;
 
-    void setTargetDirectory(const std::filesystem::path& l_path);
-    const std::filesystem::path& getTargetDirectory() const;
+    void addTargetDirectory(const std::filesystem::path& l_path);
+    void removeTargetDirectory(const std::filesystem::path& l_path);
+    const std::unordered_set<std::filesystem::path>& getTargetDirectories() const;
 
-    void setTargetExtensions(const std::unordered_set<std::string>& l_extensions);
+    void setTargetExtensions(const std::initializer_list<std::string>& l_extensions);
+    void addTargetExtension(const std::string& l_extension);
+    void removeTargetExtension(const std::string& l_extension);
     const std::unordered_set<std::string>& getTargetExtensions() const;
+
+    void setExemptFiles(const std::initializer_list<std::string>& l_exemptions);
+    void addExemptFile(const std::string& l_filename);
+    void removeExemptFile(const std::string& l_filename);
+    const std::unordered_set<std::string>& getExemptFiles() const;
+    bool isExempt(const std::string& l_filename) const;
 };
