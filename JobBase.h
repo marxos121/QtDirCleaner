@@ -18,19 +18,30 @@ public:
     virtual bool isValid() const;
 
     virtual void readIn(std::istream& is) = 0;
-    virtual void execute() = 0;
+    virtual void execute();
 
 protected:
 	std::filesystem::path m_targetDirectory;
 	std::unordered_set<std::string> m_targetExtensions;
     std::unordered_set<std::string> m_exemptFiles;
 
-    const JobType m_type;
-    bool m_isFinished;
     std::string m_log;
 
-    const std::string LOG_DIRECTORY = "logs";
     void createLogDirectory() const;
+    void clearLog();
+    virtual void addHeader() = 0;
+    virtual void addFooter() = 0;
+    virtual void addSummary() = 0;
+
+    virtual bool processFile(const std::filesystem::directory_entry& de) = 0;
+
+private:
+    //For internal use only
+    const std::string LOG_DIRECTORY = "logs";
+    int m_processedFiles;
+    int m_matchingFiles;
+    const JobType m_type;
+    bool m_isFinished;
 
 public: 
     // ========== Setters and Getters ==========

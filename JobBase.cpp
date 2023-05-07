@@ -51,12 +51,62 @@ bool JobBase::isValid() const
     return true;
 }
 
+void JobBase::execute()
+{
+    if (!isValid())
+    {
+        return;
+    }
+
+    clearLog();
+    addHeader();
+
+    for (auto& dirEntry : std::filesystem::directory_iterator(m_targetDirectory)) 
+    {
+        const std::string currExtension = dirEntry.path().extension().string();
+        const std::string currFilename = dirEntry.path().filename().string();
+
+        if ((m_targetExtensions.empty() || m_targetExtensions.find(currExtension) != m_targetExtensions.end())
+            && m_exemptFiles.find(currFilename) == m_exemptFiles.end())
+        {
+            ++m_matchingFiles;
+
+            if (processFile(dirEntry)) {
+                ++m_processedFiles;
+            }
+        }
+    }
+
+    addSummary();
+
+    m_isFinished = m_matchingFiles == m_processedFiles;
+
+    addFooter();
+    saveLog();
+
+    //Universal job steps:
+    //1. validate Job object	(virtual)
+    //2. clear log + add header (v function)
+    //3. iterate over dir
+    //		3a. check conditions
+    //		3b. do the job	(virtual) -> return t/f whether it succeeded
+    //		3c. log the status and (optional) increment processed files count
+    //4. Log the final report (virtual)
+    //5. Add footer (virtual)
+    //6. Save log
+}
+
 void JobBase::createLogDirectory() const
 {
     if (std::filesystem::exists(LOG_DIRECTORY)) {
         return;
     }
     std::filesystem::create_directory(LOG_DIRECTORY);
+}
+
+void JobBase::clearLog()
+{
+    m_log.clear();
 }
 
 // ========== Setters and Getters ==========
