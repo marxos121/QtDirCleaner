@@ -9,11 +9,17 @@ public:
 	~JobMove() = default;
 
 	virtual void readIn(std::istream& is) override;
-	virtual void execute() override;
 	virtual bool isValid() const override;
 
+protected:
+	virtual void addHeader() override;
+	virtual void addFooter() override;
+	virtual void addSummary() override;
+
+	virtual bool processFile(const std::filesystem::directory_entry& de) override;
+
 private:
-	std::filesystem::path m_destinationDir;
+	std::filesystem::path m_destinationDirectory;
 
 public:
 	//Setters and getters
