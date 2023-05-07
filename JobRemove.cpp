@@ -17,60 +17,48 @@ void JobRemove::readIn(std::istream& is)
 {
 }
 
-void JobRemove::execute()
+void JobRemove::addHeader()
 {
-	if (!isValid()) 
-	{
-		return;
-	}
-
-	m_log.clear();
 	m_log += "========REMOVE JOB STARTED========\n\n";
+}
 
-	int matchingFiles = 0;
-	int processedFiles = 0;
-
-	for (auto& dirEntry : std::filesystem::directory_iterator(m_targetDirectory)) 
-	{
-		std::string currExtension = dirEntry.path().extension().string();
-
-		if (m_targetExtensions.find(currExtension) != m_targetExtensions.end()
-			&& m_exemptFiles.find(dirEntry.path().filename().string()) == m_exemptFiles.end()) 
-		{
-
-			++matchingFiles;
-
-			try
-			{
-				std::filesystem::remove(dirEntry);
-			}
-			catch (const std::filesystem::filesystem_error& err) 
-			{
-				std::cerr << "! Error: " << err.what() << std::endl;
-				m_log += err.what() + '\n';
-				continue;
-			}
-
-			m_log += "File removed: " + dirEntry.path().filename().string() + currExtension + '\n';
-			++processedFiles;
-		}
-	}
-
-	m_log += std::to_string(processedFiles) + " files out of " + std::to_string(matchingFiles) + " removed.\n\n";
-
-	if (matchingFiles == processedFiles) 
-	{
-		m_isFinished = true;
-		
+void JobRemove::addFooter()
+{
+	if (m_isFinished) {
 		m_log += "========REMOVE JOB COMPLETE========\n\n";
 	}
-
-	else 
-	{
-		m_isFinished = false;
-
+	else {
 		m_log += "========COULDN'T COMPLETE REMOVE JOB========\n\n";
 	}
+}
 
-	saveLog();
+void JobRemove::addSummary()
+{
+	m_log += std::to_string(m_processedFiles) + " files out of " + std::to_string(m_matchingFiles) + " removed.\n\n";
+}
+
+bool JobRemove::processFile(const std::filesystem::directory_entry& de)
+{
+	bool result = false;
+	try
+	{
+		result = std::filesystem::remove(de);
+	}
+	catch (const std::filesystem::filesystem_error& err)
+	{
+		std::cerr << "! System error: " << err.what() << std::endl;
+		m_log += err.what() + '\n';
+		return false;
+	}
+
+	if (result)
+	{
+		m_log += "File removed: " + de.path().filename().string() + '\n';
+	}
+	else
+	{
+		m_log += "Couldn't remove file: " + de.path().filename().string() + '\n';
+	}
+
+	return result;
 }

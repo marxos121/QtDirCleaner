@@ -14,17 +14,22 @@ public:
     JobBase(JobType l_type, std::istream& is);
     virtual ~JobBase() = default;
 
+
+    void execute();
+
     void saveLog() const;
     virtual bool isValid() const;
 
     virtual void readIn(std::istream& is) = 0;
-    void execute();
 
 protected:
 	std::filesystem::path m_targetDirectory;
 	std::unordered_set<std::string> m_targetExtensions;
     std::unordered_set<std::string> m_exemptFiles;
 
+    int m_processedFiles;
+    int m_matchingFiles;
+    bool m_isFinished;
     std::string m_log;
 
     void createLogDirectory() const;
@@ -38,10 +43,7 @@ protected:
 private:
     //For internal use only
     const std::string LOG_DIRECTORY = "logs";
-    int m_processedFiles;
-    int m_matchingFiles;
     const JobType m_type;
-    bool m_isFinished;
 
 public: 
     // ========== Setters and Getters ==========
