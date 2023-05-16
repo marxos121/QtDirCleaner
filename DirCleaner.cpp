@@ -62,20 +62,32 @@ void DirCleaner::readInJobs(const std::wstring& l_path)
 
 		if (temp == L"[TARGET]")
 		{
-			oss >> temp;
-			m_jobs.back()->addTargetDirectory(temp);
+			std::wstring path;
+			while (oss >> temp)
+			{
+				path += temp;
+			}
+			m_jobs.back()->addTargetDirectory(path);
 		}
 
 		else if (temp == L"[EXT]")
 		{
-			oss >> temp;
-			m_jobs.back()->addTargetExtension(temp);
+			while (oss >> temp)
+			{
+				m_jobs.back()->addTargetExtension(temp);
+			}
 		}
 
 		else if (temp == L"[EXEMPT]")
 		{
-			oss >> temp;
-			m_jobs.back()->addExemptFile(temp);
+			std::wstring path;
+			while (oss >> temp)
+			{
+				path += temp + L' ';
+			}
+
+			path.pop_back();
+			m_jobs.back()->addExemptFile(path);
 		}
 
 		else if (temp == L"[DEST]" && m_jobs.back()->getType() == JobType::Move)
@@ -87,8 +99,12 @@ void DirCleaner::readInJobs(const std::wstring& l_path)
 				continue;
 			}
 
-			oss >> temp;
-			currentJob->setDestinationPath(temp);
+			std::wstring path;
+			while (oss >> temp)
+			{
+				path += temp;
+			}
+			currentJob->setDestinationPath(path);
 		}
 	}
 }
