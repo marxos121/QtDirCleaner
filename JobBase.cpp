@@ -19,10 +19,10 @@ void JobBase::saveLog() const
     const std::chrono::hh_mm_ss hhmmss{ std::chrono::floor<std::chrono::milliseconds>(now -
         std::chrono::floor<std::chrono::days>(now)) };
     
-    std::stringstream logname;
+    std::wstringstream logname;
     logname << ymd << " " << hhmmss.hours() << "-" << hhmmss.minutes() << "-" << hhmmss.seconds();
-    std::ofstream m_file(LOG_DIRECTORY + "/" + logname.str() + ".dlog");
-    m_file << m_log;
+    std::wofstream m_file(LOG_DIRECTORY + L"/" + logname.str() + L".dlog");
+    m_file << std::wstring(m_log.begin(), m_log.end());
     m_file.close();
 }
 
@@ -37,12 +37,12 @@ bool JobBase::isValid() const
     for (const auto& dir : m_targetDirectories)
     {
         if (!std::filesystem::exists(dir)) {
-            std::cerr << "! Error! Specified target directory doesn't exist (" << dir << ")" << std::endl;
+            std::wcerr << "! Error! Specified target directory doesn't exist (" << dir << ")" << std::endl;
             return false;
         }
 
         if (!std::filesystem::is_directory(dir)) {
-            std::cerr << "! Error! Specified target path is not a directory! (" << dir << ")" << std::endl;
+            std::wcerr << "! Error! Specified target path is not a directory! (" << dir << ")" << std::endl;
             return false;
         }
     }
@@ -64,8 +64,8 @@ void JobBase::execute()
     {
         for (auto& dirEntry : std::filesystem::directory_iterator(dir))
         {
-            const std::string currExtension = dirEntry.path().extension().string();
-            const std::string currFilename = dirEntry.path().filename().string();
+            const std::wstring currExtension = dirEntry.path().extension().wstring();
+            const std::wstring currFilename = dirEntry.path().filename().wstring();
 
             if ((m_targetExtensions.empty() || m_targetExtensions.find(currExtension) != m_targetExtensions.end())
                 && m_exemptFiles.find(currFilename) == m_exemptFiles.end())
@@ -86,17 +86,6 @@ void JobBase::execute()
 
     addFooter();
     saveLog();
-
-    //Universal job steps:
-    //1. validate Job object	(virtual)
-    //2. clear log + add header (v function)
-    //3. iterate over dir
-    //		3a. check conditions
-    //		3b. do the job	(virtual) -> return t/f whether it succeeded
-    //		3c. log the status and (optional) increment processed files count
-    //4. Log the final report (virtual)
-    //5. Add footer (virtual)
-    //6. Save log
 }
 
 void JobBase::createLogDirectory() const
@@ -142,45 +131,45 @@ const std::unordered_set<std::filesystem::path>& JobBase::getTargetDirectories()
     return m_targetDirectories;
 }
 
-void JobBase::setTargetExtensions(const std::initializer_list<std::string>& extensions) {
+void JobBase::setTargetExtensions(const std::initializer_list<std::wstring>& extensions) {
     m_targetExtensions = extensions;
 }
 
-void JobBase::addTargetExtension(const std::string& l_extension)
+void JobBase::addTargetExtension(const std::wstring& l_extension)
 {
     m_targetExtensions.emplace(l_extension);
 }
 
-void JobBase::removeTargetExtension(const std::string& l_extension)
+void JobBase::removeTargetExtension(const std::wstring& l_extension)
 {
     m_targetExtensions.erase(l_extension);
 }
 
-const std::unordered_set<std::string>& JobBase::getTargetExtensions() const {
+const std::unordered_set<std::wstring>& JobBase::getTargetExtensions() const {
     return m_targetExtensions;
 }
 
-void JobBase::setExemptFiles(const std::initializer_list<std::string>& l_exemptions)
+void JobBase::setExemptFiles(const std::initializer_list<std::wstring>& l_exemptions)
 {
     m_exemptFiles = l_exemptions;
 }
 
-void JobBase::addExemptFile(const std::string& l_filename)
+void JobBase::addExemptFile(const std::wstring& l_filename)
 {
     m_exemptFiles.emplace(l_filename);
 }
 
-void JobBase::removeExemptFile(const std::string& l_filename)
+void JobBase::removeExemptFile(const std::wstring& l_filename)
 {
     m_exemptFiles.erase(l_filename);
 }
 
-const std::unordered_set<std::string>& JobBase::getExemptFiles() const
+const std::unordered_set<std::wstring>& JobBase::getExemptFiles() const
 {
     return m_exemptFiles;
 }
 
-bool JobBase::isExempt(const std::string& l_filename) const
+bool JobBase::isExempt(const std::wstring& l_filename) const
 {
     return m_exemptFiles.find(l_filename) != m_exemptFiles.end();
 }

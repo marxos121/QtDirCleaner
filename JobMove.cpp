@@ -13,11 +13,19 @@ bool JobMove::isValid() const
 
 	if (!std::filesystem::exists(m_destinationDirectory)) 
 	{
-		std::filesystem::create_directories(m_destinationDirectory);
+		try
+		{
+			std::filesystem::create_directories(m_destinationDirectory);
+		}
+		
+		catch(...)
+		{
+			return false;
+		}
 	}
 	else if (!std::filesystem::is_directory(m_destinationDirectory)) 
 	{
-		std::cerr << "! Error! Specified destination path is not a directory! (" << m_destinationDirectory << ")" << std::endl;
+		std::wcerr << "! Error! Specified destination path is not a directory! (" << m_destinationDirectory << ")" << std::endl;
 		valid = false;
 	}
 
