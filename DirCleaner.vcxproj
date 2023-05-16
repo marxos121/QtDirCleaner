@@ -20,10 +20,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirCleaner.cpp" />
+    <ClCompile Include="JobBase.cpp" />
+    <ClCompile Include="JobMove.cpp" />
+    <ClCompile Include="JobRemove.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirCleaner.h" />
+    <ClInclude Include="JobBase.h" />
+    <ClInclude Include="JobMove.h" />
+    <ClInclude Include="JobRemove.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

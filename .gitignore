@@ -32,3 +32,4 @@
 *.app
 /.vs/DirCleaner/v17
 /.vs/DirCleaner/FileContentIndex
+/x64/Debug
