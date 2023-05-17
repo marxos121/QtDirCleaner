@@ -21,9 +21,18 @@ void JobBase::saveLog() const
     
     std::wstringstream logname;
     logname << ymd << " " << hhmmss.hours() << "-" << hhmmss.minutes() << "-" << hhmmss.seconds();
-    std::wofstream m_file(LOG_DIRECTORY + L"/" + logname.str() + L".dlog");
-    m_file << std::wstring(m_log.begin(), m_log.end());
-    m_file.close();
+    createLogDirectory();
+
+    //If LOG_DIRECTORY contains an absolute path, then use it; otherwise append to current path
+    std::filesystem::path logPath =
+        (LOG_DIRECTORY.string().length() > 1 && LOG_DIRECTORY.string()[1] == ':' ?
+            LOG_DIRECTORY
+            : std::filesystem::current_path() / LOG_DIRECTORY) / (logname.str() + L".dlog");
+
+    std::wofstream os(logPath);
+    os.imbue(std::locale("en_US.utf8"));
+    os << std::wstring(m_log.begin(), m_log.end());
+    os.close();
 }
 
 bool JobBase::isValid() const
@@ -106,7 +115,7 @@ JobType JobBase::getType() const {
     return m_type;
 }
 
-const std::string& JobBase::getLog() const {
+const std::wstring& JobBase::getLog() const {
     return m_log;
 }
 

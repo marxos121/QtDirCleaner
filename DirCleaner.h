@@ -11,18 +11,18 @@ public:
 	DirCleaner();
 	~DirCleaner();
 
-	void readInJobs(const std::filesystem::path& l_path = L"jobs.txt");
+	void readInJobs(const std::filesystem::path& l_path = L"jobs.jobs");
 	void addJob(JobBase* l_jb);
 
 	void executeNext();
-	void executeAll();
+	void executeAL();
 
 	void saveLog();
 	void clearLogFile();
 
 private:
 	std::deque<JobBase*> m_jobs;
-	std::string m_log;
+	std::wstring m_log;
 	int m_executedJobs;
 
 	//Factory

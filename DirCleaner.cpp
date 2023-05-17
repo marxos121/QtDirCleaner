@@ -38,13 +38,13 @@ void DirCleaner::readInJobs(const std::filesystem::path& l_path)
 	while (std::getline(is, line))
 	{
 		std::wstring temp;
-		std::wistringstream oss(line);
+		std::wistringstream ss(line);
 
-		oss >> temp;
+		ss >> temp;
 
 		if (temp == L"[TYPE]")
 		{
-			oss >> temp;
+			ss >> temp;
 
 			JobType type = strToJobType(temp);
 
@@ -65,7 +65,7 @@ void DirCleaner::readInJobs(const std::filesystem::path& l_path)
 		if (temp == L"[TARGET]")
 		{
 			std::wstring path;
-			while (oss >> temp)
+			while (ss >> temp)
 			{
 				path += temp;
 			}
@@ -74,7 +74,7 @@ void DirCleaner::readInJobs(const std::filesystem::path& l_path)
 
 		else if (temp == L"[EXT]")
 		{
-			while (oss >> temp)
+			while (ss >> temp)
 			{
 				m_jobs.back()->addTargetExtension(temp);
 			}
@@ -83,7 +83,7 @@ void DirCleaner::readInJobs(const std::filesystem::path& l_path)
 		else if (temp == L"[EXEMPT]")
 		{
 			std::wstring path;
-			while (oss >> temp)
+			while (ss >> temp)
 			{
 				path += temp + L' ';
 			}
@@ -102,7 +102,7 @@ void DirCleaner::readInJobs(const std::filesystem::path& l_path)
 			}
 
 			std::wstring path;
-			while (oss >> temp)
+			while (ss >> temp)
 			{
 				path += temp;
 			}
@@ -133,13 +133,13 @@ void DirCleaner::executeNext()
 	}
 
 	m_jobs.front()->execute();
-	m_log += m_jobs.front()->getLog() + '\n';
+	m_log += m_jobs.front()->getLog() + L'\n';
 	m_jobs.pop_front();
 
 	++m_executedJobs;
 }
 
-void DirCleaner::executeAll() 
+void DirCleaner::executeAL() 
 {
 	while (!m_jobs.empty())
 	{
@@ -149,15 +149,16 @@ void DirCleaner::executeAll()
 
 void DirCleaner::saveLog()
 {
-	m_log += "\n\nExecuted " + std::to_string(m_executedJobs) + " jobs.";
-	std::ofstream os("DirCleanerLog.txt", std::ios_base::app);
+	m_log += L"Executed " + std::to_wstring(m_executedJobs) + L" job" + (m_executedJobs == 1 ? L"" : L"s") + L".\n\n";
+	std::wofstream os("DirCleanerLog.dlog", std::ios_base::app);
+	os.imbue(std::locale("en_US.utf8"));
 	os << m_log;
 	os.close();
 }
 
 void DirCleaner::clearLogFile()
 {
-	std::ofstream os("DirCleanerLog.txt");
+	std::ofstream os("DirCleanerLog.dlog");
 	os.close();
 }
 

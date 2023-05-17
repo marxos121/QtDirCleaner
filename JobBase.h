@@ -27,7 +27,7 @@ protected:
     int m_processedFiles;
     int m_matchingFiles;
     bool m_isFinished;
-    std::string m_log;
+    std::wstring m_log;
 
     void createLogDirectory() const;
     void clearLog();
@@ -39,13 +39,13 @@ protected:
 
 private:
     //For internal use only
-    const std::wstring LOG_DIRECTORY = L"logs";
+    const std::filesystem::path LOG_DIRECTORY = L"logs";
     const JobType m_type;
 
 public: 
     // ========== Setters and Getters ==========
     JobType getType() const;
-    const std::string& getLog() const;
+    const std::wstring& getLog() const;
 
     void setFinished(bool l_finished);
     bool getFinished() const;
