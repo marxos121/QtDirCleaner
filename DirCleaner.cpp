@@ -7,6 +7,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <locale>
+
 DirCleaner::DirCleaner()
 {
 	registerJobType<JobMove>(JobType::Move);
@@ -22,10 +24,10 @@ DirCleaner::~DirCleaner()
 	}
 }
 
-void DirCleaner::readInJobs(const std::wstring& l_path)
+void DirCleaner::readInJobs(const std::filesystem::path& l_path)
 {
 	std::wifstream is(l_path);
-
+	is.imbue(std::locale("en_US.utf8"));
 	if (!is.is_open())
 	{
 		std::wcerr << "! Failed to open file: " << l_path << std::endl;

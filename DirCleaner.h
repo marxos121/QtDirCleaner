@@ -11,7 +11,7 @@ public:
 	DirCleaner();
 	~DirCleaner();
 
-	void readInJobs(const std::wstring& l_path = L"jobs.txt");
+	void readInJobs(const std::filesystem::path& l_path = L"jobs.txt");
 	void addJob(JobBase* l_jb);
 
 	void executeNext();
