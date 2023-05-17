@@ -15,7 +15,7 @@ public:
 	void addJob(JobBase* l_jb);
 
 	void executeNext();
-	void executeAL();
+	void executeAll();
 
 	void saveLog();
 	void clearLogFile();

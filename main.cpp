@@ -4,7 +4,7 @@ int main()
 {
 	DirCleaner cln;
 	cln.readInJobs();
-	cln.executeAL();
+	cln.executeAll();
 	cln.saveLog();
 
 	return 0;

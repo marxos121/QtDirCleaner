@@ -33,3 +33,6 @@
 /.vs/DirCleaner/v17
 /.vs/DirCleaner/FileContentIndex
 /x64/Debug
+/logs
+/DirCleanerLog.dlog
+/jobs.jobs

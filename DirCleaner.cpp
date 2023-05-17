@@ -139,7 +139,7 @@ void DirCleaner::executeNext()
 	++m_executedJobs;
 }
 
-void DirCleaner::executeAL() 
+void DirCleaner::executeAll() 
 {
 	while (!m_jobs.empty())
 	{
