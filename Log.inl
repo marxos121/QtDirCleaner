@@ -1,8 +1,11 @@
 #include "Log.h"
 
-
-
-
+template<typename T>
+inline Log<T>& Log<T>::operator+=(const T& rhs)
+{
+    m_content.append(rhs);
+    return *this;
+}
 
 template<typename T>
 inline void Log<T>::append(T l_content)
@@ -33,7 +36,7 @@ inline void Log<T>::save(const std::filesystem::path& l_path, const std::locale&
 {
     std::wofstream os(l_path);
     os.imbue(l_encoding);
-    os << getAll();
+    os << *this;
     os.close();
 }
 

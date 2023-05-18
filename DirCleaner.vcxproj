@@ -23,6 +23,7 @@
     <ClCompile Include="JobBase.cpp" />
     <ClCompile Include="JobMove.cpp" />
     <ClCompile Include="JobRemove.cpp" />
+    <ClCompile Include="Log.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
