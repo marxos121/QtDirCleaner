@@ -18,9 +18,6 @@ public:
 	void appendContent(const Log<T>& rhs);
 	void appendAll(const Log<T>& rhs);
 
-	void addHeader();
-	void addFooter();
-
 	void clearContent();
 
 	void save(const std::filesystem::path& l_path = "log.dlog");
@@ -41,3 +38,5 @@ public:
 	void setHeader(const T& l_header);
 	void setFooter(const T& l_footer);
 };
+
+#include "Log.inl"

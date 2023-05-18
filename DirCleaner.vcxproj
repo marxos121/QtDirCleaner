@@ -32,6 +32,9 @@
     <ClInclude Include="JobRemove.h" />
     <ClInclude Include="Log.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Log.inl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
