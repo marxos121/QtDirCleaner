@@ -30,6 +30,7 @@
     <ClInclude Include="JobBase.h" />
     <ClInclude Include="JobMove.h" />
     <ClInclude Include="JobRemove.h" />
+    <ClInclude Include="Log.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
