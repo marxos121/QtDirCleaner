@@ -32,9 +32,9 @@ inline void Log<T>::clearContent()
 }
 
 template<typename T>
-inline void Log<T>::save(const std::filesystem::path& l_path, const std::locale& l_encoding)
+inline void Log<T>::save(const std::filesystem::path& l_path, const std::locale& l_encoding) const
 {
-    std::wofstream os(l_path);
+    std::basic_ofstream<T::value_type> os(l_path);
     os.imbue(l_encoding);
     os << *this;
     os.close();

@@ -13,7 +13,7 @@ public:
 
 	void clearContent();
 
-	void save(const std::filesystem::path& l_path = "log.dlog", const std::locale& l_encoding = std::locale("en_US.utf8");
+	void save(const std::filesystem::path& l_path = "log.dlog", const std::locale& l_encoding = std::locale("en_US.utf8")) const;
 
 private:
 	T m_content;
