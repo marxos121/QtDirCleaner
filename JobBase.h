@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Log.h"
+
 #include <filesystem>
 #include <unordered_set>
 #include <string>
@@ -27,11 +29,13 @@ protected:
     int m_processedFiles;
     int m_matchingFiles;
     bool m_isFinished;
-    std::wstring m_log;
+    Log<wchar_t> m_log;
 
     void createLogDirectory() const;
     void clearLog();
-    virtual void addHeader() = 0;
+    virtual void setHeaderPending() = 0;
+    virtual void setHeaderStarted() = 0;
+    virtual void addDescription();
     virtual void addFooter() = 0;
     virtual void addSummary() = 0;
 
@@ -45,7 +49,7 @@ private:
 public: 
     // ========== Setters and Getters ==========
     JobType getType() const;
-    const std::wstring& getLog() const;
+    const Log<wchar_t>& getLog() const;
 
     void setFinished(bool l_finished);
     bool getFinished() const;

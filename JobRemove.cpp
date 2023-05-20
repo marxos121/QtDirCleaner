@@ -5,20 +5,26 @@
 JobRemove::JobRemove()
 	: JobBase(JobType::Remove)
 {
+	setHeaderPending();
 }
 
-void JobRemove::addHeader()
+void JobRemove::setHeaderPending()
 {
-	m_log += L"========REMOVE JOB STARTED========\n\n";
+	m_log += L"========REMOVE JOB PENDING========";
+}
+
+void JobRemove::setHeaderStarted()
+{
+	m_log.setHeader(L"========REMOVE JOB STARTED========");
 }
 
 void JobRemove::addFooter()
 {
 	if (m_isFinished) {
-		m_log += L"========REMOVE JOB COMPLETE========\n\n";
+		m_log += L"========REMOVE JOB COMPLETE========";
 	}
 	else {
-		m_log += L"========COULDN'T COMPLETE REMOVE JOB========\n\n";
+		m_log += L"========COULDN'T COMPLETE REMOVE JOB========";
 	}
 }
 
@@ -37,7 +43,6 @@ bool JobRemove::processFile(const std::filesystem::directory_entry& de)
 	catch (const std::filesystem::filesystem_error& err)
 	{
 		std::cerr << "! System error: " << err.what() << std::endl;
-		//m_log += err.what() + '\n';
 		return false;
 	}
 

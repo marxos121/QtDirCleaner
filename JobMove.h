@@ -10,7 +10,9 @@ public:
 	virtual bool isValid() const override;
 
 protected:
-	virtual void addHeader() override;
+	virtual void setHeaderPending() override;
+	virtual void setHeaderStarted() override;
+	virtual void addDescription() override;
 	virtual void addFooter() override;
 	virtual void addSummary() override;
 

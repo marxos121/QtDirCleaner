@@ -5,6 +5,7 @@
 JobMove::JobMove()
 	: JobBase(JobType::Move)
 {
+	setHeaderPending();
 }
 
 bool JobMove::isValid() const
@@ -32,26 +33,37 @@ bool JobMove::isValid() const
 	return valid;
 }
 
-void JobMove::addHeader()
+void JobMove::setHeaderPending()
 {
-	m_log += L"========MOVE JOB STARTED========\n\n";
+	m_log.setHeader(L"========MOVE JOB PENDING========");
+}
+
+void JobMove::setHeaderStarted()
+{
+	m_log.setHeader(L"========MOVE JOB STARTED========");
+}
+
+void JobMove::addDescription()
+{
+	m_log += L"Destination directory: " + m_destinationDirectory.wstring() + L"\n";
+	JobBase::addDescription();
 }
 
 void JobMove::addFooter()
 {
 	if (m_isFinished) 
 	{
-		m_log += L"========MOVE JOB COMPLETE========\n\n";
+		m_log.setFooter(L"========MOVE JOB COMPLETE========");
 	}
 	else 
 	{
-		m_log += L"========COULDN'T COMPLETE MOVE JOB========\n\n";
+		m_log.setFooter(L"========COULDN'T COMPLETE MOVE JOB========");
 	}
 }
 
 void JobMove::addSummary()
 {
-	m_log += std::to_wstring(m_processedFiles) + L" files out of " + std::to_wstring(m_matchingFiles) + L" moved.\n\n";
+	m_log += std::to_wstring(m_processedFiles) + L" files out of " + std::to_wstring(m_matchingFiles) + L" moved.";
 }
 
 bool JobMove::processFile(const std::filesystem::directory_entry& de)
@@ -64,7 +76,6 @@ bool JobMove::processFile(const std::filesystem::directory_entry& de)
 	catch (const std::filesystem::filesystem_error& err)
 	{
 		std::cerr << "! System error: " << err.what() << std::endl;
-		//m_log += Lerr.what() + '\n';
 		return false;
 	}
 
@@ -76,7 +87,6 @@ bool JobMove::processFile(const std::filesystem::directory_entry& de)
 	catch (const std::filesystem::filesystem_error& err)
 	{
 		std::cerr << "! System error: " << err.what() << std::endl;
-		//m_log += Lerr.what() + '\n';
 		return false;
 	}
 

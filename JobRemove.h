@@ -8,7 +8,8 @@ public:
 	~JobRemove() = default;
 
 protected:
-	virtual void addHeader() override;
+	virtual void setHeaderPending() override;
+	virtual void setHeaderStarted() override;
 	virtual void addFooter() override;
 	virtual void addSummary() override;
 

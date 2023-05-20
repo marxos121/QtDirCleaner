@@ -5,6 +5,7 @@
 #include <functional>
 
 #include "JobBase.h"
+#include "Log.h"
 
 class DirCleaner {
 public:
@@ -22,7 +23,7 @@ public:
 
 private:
 	std::deque<JobBase*> m_jobs;
-	std::wstring m_log;
+	Log<wchar_t> m_log;
 	int m_executedJobs;
 
 	//Factory

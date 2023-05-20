@@ -133,7 +133,7 @@ void DirCleaner::executeNext()
 	}
 
 	m_jobs.front()->execute();
-	m_log += m_jobs.front()->getLog() + L'\n';
+	m_log += m_jobs.front()->getLog().getAll(L"\n\n") + L"\n";
 	m_jobs.pop_front();
 
 	++m_executedJobs;
@@ -150,10 +150,7 @@ void DirCleaner::executeAll()
 void DirCleaner::saveLog()
 {
 	m_log += L"Executed " + std::to_wstring(m_executedJobs) + L" job" + (m_executedJobs == 1 ? L"" : L"s") + L".\n\n";
-	std::wofstream os("DirCleanerLog.dlog", std::ios_base::app);
-	os.imbue(std::locale("en_US.utf8"));
-	os << m_log;
-	os.close();
+	m_log.save("DirCleanerLog.dlog");
 }
 
 void DirCleaner::clearLogFile()

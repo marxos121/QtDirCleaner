@@ -28,11 +28,7 @@ void JobBase::saveLog() const
         (LOG_DIRECTORY.string().length() > 1 && LOG_DIRECTORY.string()[1] == ':' ?
             LOG_DIRECTORY
             : std::filesystem::current_path() / LOG_DIRECTORY) / (logname.str() + L".dlog");
-
-    std::wofstream os(logPath);
-    os.imbue(std::locale("en_US.utf8"));
-    os << std::wstring(m_log.begin(), m_log.end());
-    os.close();
+    m_log.save(logPath);
 }
 
 bool JobBase::isValid() const
@@ -66,8 +62,8 @@ void JobBase::execute()
         return;
     }
 
-    clearLog();
-    addHeader();
+    setHeaderStarted();
+    addDescription();
 
     for(const auto& dir : m_targetDirectories)
     {
@@ -94,7 +90,6 @@ void JobBase::execute()
     m_isFinished = m_matchingFiles == m_processedFiles;
 
     addFooter();
-    saveLog();
 }
 
 void JobBase::createLogDirectory() const
@@ -107,7 +102,23 @@ void JobBase::createLogDirectory() const
 
 void JobBase::clearLog()
 {
-    m_log.clear();
+    m_log.clearContent();
+}
+
+void JobBase::addDescription()
+{
+    m_log += L"Target folder(s):\n";
+    for (const auto& dir : m_targetDirectories)
+    {
+        m_log += dir.wstring() + L"\n";
+    }
+
+    m_log += L"\nTarget extension(s): ";
+    for (const auto& ext : m_targetExtensions)
+    {
+        m_log += ext + L" ";
+    }
+    m_log += L"\n";
 }
 
 // ========== Setters and Getters ==========
@@ -115,7 +126,7 @@ JobType JobBase::getType() const {
     return m_type;
 }
 
-const std::wstring& JobBase::getLog() const {
+const Log<wchar_t>& JobBase::getLog() const {
     return m_log;
 }
 
