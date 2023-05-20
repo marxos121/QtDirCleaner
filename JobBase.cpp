@@ -31,7 +31,7 @@ void JobBase::saveLog() const
     m_log.save(logPath);
 }
 
-bool JobBase::isValid() const
+bool JobBase::isReady() const
 {
     if (m_targetDirectories.empty())
     {
@@ -39,17 +39,10 @@ bool JobBase::isValid() const
         return false;
     }
 
-    for (const auto& dir : m_targetDirectories)
+    if (m_targetExtensions.empty())
     {
-        if (!std::filesystem::exists(dir)) {
-            std::wcerr << "! Error! Specified target directory doesn't exist (" << dir << ")" << std::endl;
-            return false;
-        }
-
-        if (!std::filesystem::is_directory(dir)) {
-            std::wcerr << "! Error! Specified target path is not a directory! (" << dir << ")" << std::endl;
-            return false;
-        }
+        std::cerr << "! Error! No target extension specified!" << std::endl;
+        return false;
     }
 
     return true;
@@ -57,7 +50,7 @@ bool JobBase::isValid() const
 
 void JobBase::execute()
 {
-    if (!isValid() || m_isFinished)
+    if (!isReady() || m_isFinished)
     {
         return;
     }
@@ -67,6 +60,18 @@ void JobBase::execute()
 
     for(const auto& dir : m_targetDirectories)
     {
+        if (!std::filesystem::exists(dir))
+        {
+            std::wcerr << "! Error! Specified target directory doesn't exist (" << dir << ")" << std::endl;
+            continue;
+        }
+
+        else if (!std::filesystem::is_directory(dir))
+        {
+            std::wcerr << "! Error! Specified target path is not a directory! (" << dir << ")" << std::endl;
+            continue;
+        }
+
         for (auto& dirEntry : std::filesystem::directory_iterator(dir))
         {
             const std::wstring currExtension = dirEntry.path().extension().wstring();

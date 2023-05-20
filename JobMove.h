@@ -7,7 +7,7 @@ public:
 	JobMove();
 	~JobMove() = default;
 
-	virtual bool isValid() const override;
+	virtual bool isReady() const override;
 
 protected:
 	virtual void setHeaderPending() override;

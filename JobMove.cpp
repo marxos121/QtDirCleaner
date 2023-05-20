@@ -8,9 +8,9 @@ JobMove::JobMove()
 	setHeaderPending();
 }
 
-bool JobMove::isValid() const
+bool JobMove::isReady() const
 {
-	bool valid = JobBase::isValid();
+	bool valid = JobBase::isReady();
 
 	if (!std::filesystem::exists(m_destinationDirectory)) 
 	{

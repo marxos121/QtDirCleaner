@@ -19,7 +19,7 @@ public:
     void execute();
 
     void saveLog() const;
-    virtual bool isValid() const;
+    virtual bool isReady() const;
 
 protected:
 	std::unordered_set<std::filesystem::path> m_targetDirectories;
