@@ -33,7 +33,8 @@ void DirCleaner::readInJobs(const std::filesystem::path& l_path)
 		std::wcerr << "! Failed to open file: " << l_path << std::endl;
 		return;
 	}
-
+	
+	bool targetAll = false;
 	std::wstring line;
 	while (std::getline(is, line))
 	{
@@ -76,7 +77,16 @@ void DirCleaner::readInJobs(const std::filesystem::path& l_path)
 		{
 			while (ss >> temp)
 			{
-				m_jobs.back()->addTargetExtension(temp);
+				if (temp == L".*") 
+				{
+					targetAll = true;
+					m_jobs.back()->clearTargetExtensions();
+					m_jobs.back()->addTargetExtension(temp);
+				}
+				else if (!targetAll)
+				{
+					m_jobs.back()->addTargetExtension(temp);
+				}
 			}
 		}
 

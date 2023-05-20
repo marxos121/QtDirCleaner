@@ -74,11 +74,17 @@ void JobBase::execute()
 
         for (auto& dirEntry : std::filesystem::directory_iterator(dir))
         {
+            if (std::filesystem::is_directory(dirEntry))
+            {
+                continue;
+            }
+
             const std::wstring currExtension = dirEntry.path().extension().wstring();
             const std::wstring currFilename = dirEntry.path().filename().wstring();
 
-            if ((m_targetExtensions.empty() || m_targetExtensions.find(currExtension) != m_targetExtensions.end())
-                && m_exemptFiles.find(currFilename) == m_exemptFiles.end())
+            if (m_targetExtensions.find(L".*") != m_targetExtensions.end()
+                || (m_targetExtensions.find(currExtension) != m_targetExtensions.end()
+                    && m_exemptFiles.find(currFilename) == m_exemptFiles.end()))
             {
                 ++m_matchingFiles;
 
@@ -168,6 +174,11 @@ void JobBase::addTargetExtension(const std::wstring& l_extension)
 void JobBase::removeTargetExtension(const std::wstring& l_extension)
 {
     m_targetExtensions.erase(l_extension);
+}
+
+void JobBase::clearTargetExtensions()
+{
+    m_targetExtensions.clear();
 }
 
 const std::unordered_set<std::wstring>& JobBase::getTargetExtensions() const {

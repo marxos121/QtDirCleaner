@@ -61,6 +61,7 @@ public:
     void setTargetExtensions(const std::initializer_list<std::wstring>& l_extensions);
     void addTargetExtension(const std::wstring& l_extension);
     void removeTargetExtension(const std::wstring& l_extension);
+    void clearTargetExtensions();
     const std::unordered_set<std::wstring>& getTargetExtensions() const;
 
     void setExemptFiles(const std::initializer_list<std::wstring>& l_exemptions);
