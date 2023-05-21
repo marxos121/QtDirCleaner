@@ -33,6 +33,11 @@ void JobBase::saveLog() const
 
 bool JobBase::isReady() const
 {
+    if (m_isFinished)
+    {
+        return false;
+    }
+
     if (m_targetDirectories.empty())
     {
         std::cerr << "! Error! No target directory specified!" << std::endl;
@@ -50,7 +55,7 @@ bool JobBase::isReady() const
 
 void JobBase::execute()
 {
-    if (!isReady() || m_isFinished)
+    if (!isReady())
     {
         return;
     }

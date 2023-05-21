@@ -6,7 +6,7 @@
 #include <unordered_set>
 #include <string>
 
-enum JobType 
+enum class JobType 
 {
     Move, Remove
 };
