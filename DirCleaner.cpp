@@ -132,7 +132,7 @@ void DirCleaner::addJob(JobBase* l_jb)
 	{
 		temp = new JobRemove(*static_cast<JobRemove*>(l_jb));
 	}
-	m_jobs.push_back(l_jb);
+	m_jobs.push_back(temp);
 }
 
 void DirCleaner::executeNext()
