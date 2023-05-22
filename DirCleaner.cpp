@@ -181,3 +181,8 @@ JobType DirCleaner::strToJobType(const std::wstring& type)
 
 	return (JobType)-1;
 }
+
+const std::deque<JobBase*>& DirCleaner::getQueuedJobs()
+{
+	return m_jobs;
+}

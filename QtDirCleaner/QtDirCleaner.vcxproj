@@ -88,6 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="JobTableView.cpp" />
     <QtRcc Include="QtDirCleaner.qrc" />
     <QtUic Include="QtDirCleaner.ui" />
     <QtMoc Include="QtDirCleaner.h" />
@@ -106,6 +107,7 @@
     <ClInclude Include="..\JobRemove.h" />
     <ClInclude Include="..\Log.h" />
     <ClInclude Include="DirectoryCleanModel.h" />
+    <QtMoc Include="JobTableView.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Log.inl" />

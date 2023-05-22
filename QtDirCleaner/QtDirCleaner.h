@@ -1,11 +1,13 @@
 #pragma once
 
-#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QWidget>
 #include "ui_QtDirCleaner.h"
 
 #include "../DirCleaner.h"
 
-class QtDirCleaner : public QMainWindow
+class JobTableView;
+
+class QtDirCleaner : public QWidget
 {
     Q_OBJECT
 
@@ -14,7 +16,13 @@ public:
     ~QtDirCleaner();
 
 private:
-    Ui::QtDirCleanerClass ui;
-    DirCleaner m_cleaner;
+    DirCleaner m_cleaner; 
+    JobTableView* m_table;
+
+private slots:
+    void onAddClick();
+    void onEditClick();
+    void onRemoveClick();
+    void onExecuteClick();
 
 };

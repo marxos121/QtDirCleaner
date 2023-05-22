@@ -21,6 +21,9 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
+    <Filter Include="Qt">
+      <UniqueIdentifier>{0c4622c9-6dff-4a51-b9f1-254352b8d281}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="QtDirCleaner.qrc">
@@ -29,12 +32,6 @@
     <QtUic Include="QtDirCleaner.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtMoc Include="QtDirCleaner.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <ClCompile Include="QtDirCleaner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -52,8 +49,14 @@
     <ClCompile Include="..\JobRemove.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="QtDirCleaner.cpp">
+      <Filter>Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="JobTableView.cpp">
+      <Filter>Qt</Filter>
+    </ClCompile>
     <ClCompile Include="DirectoryCleanModel.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Qt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,12 +76,20 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DirectoryCleanModel.h">
-      <Filter>Header Files</Filter>
+      <Filter>Qt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Log.inl">
       <Filter>Header Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="QtDirCleaner.h">
+      <Filter>Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="JobTableView.h">
+      <Filter>Qt</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>

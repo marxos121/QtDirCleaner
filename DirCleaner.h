@@ -40,4 +40,7 @@ private:
 	}
 
 	JobType strToJobType(const std::wstring& type);
+
+public:
+	const std::deque<JobBase*>& getQueuedJobs();
 };
