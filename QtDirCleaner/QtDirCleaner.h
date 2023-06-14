@@ -1,11 +1,9 @@
 #pragma once
 
 #include <QtWidgets/QWidget>
-#include "ui_QtDirCleaner.h"
 
-#include "../DirCleaner.h"
-
-class JobTableView;
+class QTableView;
+class QPushButton;
 
 class QtDirCleaner : public QWidget
 {
@@ -16,13 +14,17 @@ public:
     ~QtDirCleaner();
 
 private:
-    DirCleaner m_cleaner; 
-    JobTableView* m_table;
+    QTableView* m_table;
+    QPushButton* m_editButton; 
+    QPushButton* m_removeButton;
+    QPushButton* m_executeSelectedButton;
+    QPushButton* m_executeAllButton;
 
 private slots:
     void onAddClick();
     void onEditClick();
     void onRemoveClick();
-    void onExecuteClick();
-
+    void onExecuteSelectedClick();
+    void onExecuteAllClick();
+    void onCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
 };

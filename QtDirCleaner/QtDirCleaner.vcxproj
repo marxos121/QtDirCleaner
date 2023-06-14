@@ -66,7 +66,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ClCompile>
@@ -88,29 +88,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="JobTableView.cpp" />
-    <QtRcc Include="QtDirCleaner.qrc" />
-    <QtUic Include="QtDirCleaner.ui" />
+    <ClCompile Include="DirLineEdit.cpp" />
+    <ClCompile Include="DirListDelegate.cpp" />
+    <ClCompile Include="DirListView.cpp" />
+    <ClCompile Include="JobAddDialog.cpp" />
+    <ClCompile Include="JobBlueprint.cpp" />
+    <ClCompile Include="JobDialog.cpp" />
+    <ClCompile Include="JobEditDialog.cpp" />
+    <ClCompile Include="QtLog.cpp" />
     <QtMoc Include="QtDirCleaner.h" />
-    <ClCompile Include="..\DirCleaner.cpp" />
     <ClCompile Include="..\JobBase.cpp" />
     <ClCompile Include="..\JobMove.cpp" />
     <ClCompile Include="..\JobRemove.cpp" />
-    <ClCompile Include="DirectoryCleanModel.cpp" />
     <ClCompile Include="QtDirCleaner.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\DirCleaner.h" />
     <ClInclude Include="..\JobBase.h" />
+    <ClInclude Include="..\JobBlueprint.h" />
     <ClInclude Include="..\JobMove.h" />
     <ClInclude Include="..\JobRemove.h" />
-    <ClInclude Include="..\Log.h" />
-    <ClInclude Include="DirectoryCleanModel.h" />
-    <QtMoc Include="JobTableView.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Log.inl" />
+    <ClInclude Include="Columns.h" />
+    <ClInclude Include="QtLog.h" />
+    <QtMoc Include="JobEditDialog.h" />
+    <QtMoc Include="JobAddDialog.h" />
+    <QtMoc Include="DirListView.h" />
+    <QtMoc Include="DirListDelegate.h" />
+    <QtMoc Include="DirLineEdit.h" />
+    <QtMoc Include="JobDialog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

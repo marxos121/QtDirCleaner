@@ -26,18 +26,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="QtDirCleaner.qrc">
-      <Filter>Resource Files</Filter>
-    </QtRcc>
-    <QtUic Include="QtDirCleaner.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DirCleaner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\JobBase.cpp">
@@ -52,17 +41,32 @@
     <ClCompile Include="QtDirCleaner.cpp">
       <Filter>Qt</Filter>
     </ClCompile>
-    <ClCompile Include="JobTableView.cpp">
+    <ClCompile Include="DirLineEdit.cpp">
       <Filter>Qt</Filter>
     </ClCompile>
-    <ClCompile Include="DirectoryCleanModel.cpp">
+    <ClCompile Include="JobDialog.cpp">
       <Filter>Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="DirListDelegate.cpp">
+      <Filter>Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="DirListView.cpp">
+      <Filter>Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="JobAddDialog.cpp">
+      <Filter>Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="JobEditDialog.cpp">
+      <Filter>Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="QtLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JobBlueprint.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\DirCleaner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\JobBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -72,23 +76,36 @@
     <ClInclude Include="..\JobRemove.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Log.h">
+    <ClInclude Include="..\JobBlueprint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DirectoryCleanModel.h">
+    <ClInclude Include="QtLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Columns.h">
       <Filter>Qt</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Log.inl">
-      <Filter>Header Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="QtDirCleaner.h">
       <Filter>Qt</Filter>
     </QtMoc>
-    <QtMoc Include="JobTableView.h">
+    <QtMoc Include="JobDialog.h">
+      <Filter>Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="DirLineEdit.h">
+      <Filter>Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="DirListDelegate.h">
+      <Filter>Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="DirListView.h">
+      <Filter>Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="JobAddDialog.h">
+      <Filter>Qt</Filter>
+    </QtMoc>
+    <QtMoc Include="JobEditDialog.h">
       <Filter>Qt</Filter>
     </QtMoc>
   </ItemGroup>
