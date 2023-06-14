@@ -1,4 +1,4 @@
-#include "QtLog.h"
+#include "../include/QtLog.h"
 
 #include <qfile.h>
 #include <qtextstream.h>

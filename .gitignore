@@ -30,14 +30,5 @@
 *.exe
 *.out
 *.app
-/.vs/DirCleaner/v17
-/.vs/DirCleaner/FileContentIndex
-/x64/Debug
-/logs
-/DirCleanerLog.dlog
-/jobs.jobs
-/QtDirCleaner/x64/Debug
-/build-QtDirCleaner-Desktop_Qt_6_4_1_MSVC2019_64bit-Debug
-/Log.inl
-/DirCleaner.cpp
-/DirCleaner.h
+/.vs/
+/x64/

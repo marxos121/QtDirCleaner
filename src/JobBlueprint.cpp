@@ -1,5 +1,5 @@
-#include "../JobBlueprint.h"
-#include "Columns.h"
+#include "../include/JobBlueprint.h"
+#include "../include/Columns.h"
 
 #include <qstandarditemmodel.h>
 

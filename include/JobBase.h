@@ -1,6 +1,6 @@
 #pragma once
 
-#include "QtDirCleaner/QtLog.h"
+#include "../include/QtLog.h"
 
 #include <qstring.h>
 #include <qset.h>

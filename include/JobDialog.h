@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../JobBlueprint.h"
+#include "../include/JobBlueprint.h"
 
 #include <QDialog>
 #include <QIcon>

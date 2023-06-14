@@ -1,4 +1,4 @@
-#include "JobBase.h"
+#include "../include/JobBase.h"
 
 #include <qdir.h>
 #include <qlist.h>

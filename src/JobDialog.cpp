@@ -1,7 +1,7 @@
-#include "JobDialog.h"
-#include "DirLineEdit.h"
-#include "DirListDelegate.h"
-#include "DirListView.h"
+#include "../include/JobDialog.h"
+#include "../include/DirLineEdit.h"
+#include "../include/DirListDelegate.h"
+#include "../include/DirListView.h"
 
 #include <qtimer.h>
 #include <qtoolbutton.h>

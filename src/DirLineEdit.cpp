@@ -1,4 +1,4 @@
-#include "DirLineEdit.h"
+#include "../include/DirLineEdit.h"
 #include <qtoolbutton.h>
 #include <qboxlayout.h>
 #include <qapplication.h>

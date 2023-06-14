@@ -1,4 +1,4 @@
-#include "JobMove.h"
+#include "../include/JobMove.h"
 
 #include <iostream>
 #include <qdir.h>

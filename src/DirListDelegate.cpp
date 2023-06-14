@@ -1,5 +1,5 @@
-#include "DirListDelegate.h"
-#include "DirLineEdit.h"
+#include "../include/DirListDelegate.h"
+#include "../include/DirLineEdit.h"
 
 DirectoryListDelegate::DirectoryListDelegate(QObject *parent)
 	: QStyledItemDelegate(parent), m_fileMode(QFileDialog::FileMode::Directory)

@@ -1,4 +1,4 @@
-#include "DirListView.h"
+#include "../include/DirListView.h"
 #include <qfiledialog.h>
 
 DirListView::DirListView(QWidget *parent)

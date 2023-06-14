@@ -1,8 +1,8 @@
-#include "Columns.h"
-#include "QtDirCleaner.h"
-#include "JobEditDialog.h"
-#include "JobAddDialog.h"
-#include "../JobBase.h"
+#include "../include/Columns.h"
+#include "../include/QtDirCleaner.h"
+#include "../include/JobEditDialog.h"
+#include "../include/JobAddDialog.h"
+#include "../include/JobBase.h"
 
 #include <qheaderview.h>
 #include <QBoxLayout>

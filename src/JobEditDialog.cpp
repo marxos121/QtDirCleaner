@@ -1,8 +1,8 @@
-#include "Columns.h"
+#include "../include/Columns.h"
 
-#include "JobEditDialog.h"
-#include "DirLineEdit.h"
-#include "DirListView.h"
+#include "../include/JobEditDialog.h"
+#include "../include/DirLineEdit.h"
+#include "../include/DirListView.h"
 
 #include <qstandarditemmodel.h>
 #include <qcombobox.h>

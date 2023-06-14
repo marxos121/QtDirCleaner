@@ -1,6 +1,6 @@
 #pragma once
 
-#include "JobDialog.h"
+#include "../include/JobDialog.h"
 
 template <typename T> class QList;
 class QStandardItem;

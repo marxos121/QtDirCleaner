@@ -1,6 +1,6 @@
 #pragma once
 
-#include "JobDialog.h"
+#include "../include/JobDialog.h"
 
 enum CleanModelColumns;
 class QStandardItemModel;

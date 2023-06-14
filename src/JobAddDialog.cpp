@@ -1,6 +1,6 @@
-#include "JobAddDialog.h"
-#include "DirLineEdit.h"
-#include "DirListView.h"
+#include "../include/JobAddDialog.h"
+#include "../include/DirLineEdit.h"
+#include "../include/DirListView.h"
 
 #include <QStandardItem>
 #include <qcombobox.h>

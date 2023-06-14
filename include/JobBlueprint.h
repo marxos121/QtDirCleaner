@@ -1,6 +1,6 @@
 #pragma once
-#include "JobMove.h"
-#include "JobRemove.h"
+#include "../include/JobMove.h"
+#include "../include/JobRemove.h"
 
 #include <vector>
 #include <qstringlist.h>

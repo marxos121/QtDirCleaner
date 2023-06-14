@@ -10,6 +10,36 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Columns.h" />
+    <ClInclude Include="include\JobBase.h" />
+    <ClInclude Include="include\JobBlueprint.h" />
+    <ClInclude Include="include\JobMove.h" />
+    <ClInclude Include="include\JobRemove.h" />
+    <ClInclude Include="include\QtLog.h" />
+    <QtMoc Include="include\QtDirCleaner.h" />
+    <QtMoc Include="include\JobEditDialog.h" />
+    <QtMoc Include="include\JobDialog.h" />
+    <QtMoc Include="include\JobAddDialog.h" />
+    <QtMoc Include="include\DirListView.h" />
+    <QtMoc Include="include\DirListDelegate.h" />
+    <QtMoc Include="include\DirLineEdit.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\DirLineEdit.cpp" />
+    <ClCompile Include="src\DirListDelegate.cpp" />
+    <ClCompile Include="src\DirListView.cpp" />
+    <ClCompile Include="src\JobAddDialog.cpp" />
+    <ClCompile Include="src\JobBase.cpp" />
+    <ClCompile Include="src\JobBlueprint.cpp" />
+    <ClCompile Include="src\JobDialog.cpp" />
+    <ClCompile Include="src\JobEditDialog.cpp" />
+    <ClCompile Include="src\JobMove.cpp" />
+    <ClCompile Include="src\JobRemove.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\QtDirCleaner.cpp" />
+    <ClCompile Include="src\QtLog.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9B439310-7F59-416F-A732-ED002A444E8B}</ProjectGuid>
     <Keyword>QtVS_v304</Keyword>
@@ -87,36 +117,6 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="DirLineEdit.cpp" />
-    <ClCompile Include="DirListDelegate.cpp" />
-    <ClCompile Include="DirListView.cpp" />
-    <ClCompile Include="JobAddDialog.cpp" />
-    <ClCompile Include="JobBlueprint.cpp" />
-    <ClCompile Include="JobDialog.cpp" />
-    <ClCompile Include="JobEditDialog.cpp" />
-    <ClCompile Include="QtLog.cpp" />
-    <QtMoc Include="QtDirCleaner.h" />
-    <ClCompile Include="..\JobBase.cpp" />
-    <ClCompile Include="..\JobMove.cpp" />
-    <ClCompile Include="..\JobRemove.cpp" />
-    <ClCompile Include="QtDirCleaner.cpp" />
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\JobBase.h" />
-    <ClInclude Include="..\JobBlueprint.h" />
-    <ClInclude Include="..\JobMove.h" />
-    <ClInclude Include="..\JobRemove.h" />
-    <ClInclude Include="Columns.h" />
-    <ClInclude Include="QtLog.h" />
-    <QtMoc Include="JobEditDialog.h" />
-    <QtMoc Include="JobAddDialog.h" />
-    <QtMoc Include="DirListView.h" />
-    <QtMoc Include="DirListDelegate.h" />
-    <QtMoc Include="DirLineEdit.h" />
-    <QtMoc Include="JobDialog.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

@@ -1,4 +1,4 @@
-#include "QtDirCleaner.h"
+#include "../include/QtDirCleaner.h"
 #include <QtWidgets/QApplication>
 #include <qstyle.h>
 

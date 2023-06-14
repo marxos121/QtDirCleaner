@@ -1,4 +1,4 @@
-#include "JobRemove.h"
+#include "../include/JobRemove.h"
 
 #include <iostream>
 #include <qfileinfo.h>
