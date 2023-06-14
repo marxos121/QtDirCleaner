@@ -1,6 +1,7 @@
 #include "JobMove.h"
 
 #include <iostream>
+#include <qdir.h>
 
 JobMove::JobMove()
 	: JobBase(JobType::Move)
@@ -12,21 +13,19 @@ bool JobMove::isReady() const
 {
 	bool valid = JobBase::isReady();
 
-	if (!std::filesystem::exists(m_destinationDirectory)) 
+	QDir dir(m_destinationDirectory);
+	if (!dir.exists()) 
 	{
-		try
+		bool res = dir.mkpath(".");
+
+		if (!res)
 		{
-			std::filesystem::create_directories(m_destinationDirectory);
-		}
-		
-		catch(...)
-		{
-			return false;
+			std::wcerr << "! Error! could not create a directory! (" << m_destinationDirectory.toStdWString() << ")" << std::endl;
 		}
 	}
-	else if (!std::filesystem::is_directory(m_destinationDirectory)) 
+	else if (!QFileInfo(dir.path()).isDir())
 	{
-		std::wcerr << "! Error! Specified destination path is not a directory! (" << m_destinationDirectory << ")" << std::endl;
+		std::wcerr << "! Error! Specified destination path is not a directory! (" << m_destinationDirectory.toStdWString() << ")" << std::endl;
 		valid = false;
 	}
 
@@ -35,17 +34,17 @@ bool JobMove::isReady() const
 
 void JobMove::setHeaderPending()
 {
-	m_log.setHeader(L"========MOVE JOB PENDING========");
+	m_log.setHeader("========MOVE JOB PENDING========");
 }
 
 void JobMove::setHeaderStarted()
 {
-	m_log.setHeader(L"========MOVE JOB STARTED========");
+	m_log.setHeader("========MOVE JOB STARTED========");
 }
 
 void JobMove::addDescription()
 {
-	m_log += L"Destination directory: " + m_destinationDirectory.wstring() + L"\n";
+	m_log += "Destination directory: " + m_destinationDirectory + "\n";
 	JobBase::addDescription();
 }
 
@@ -53,61 +52,60 @@ void JobMove::addFooter()
 {
 	if (m_isFinished) 
 	{
-		m_log.setFooter(L"========MOVE JOB COMPLETE========");
+		m_log.setFooter("========MOVE JOB COMPLETE========");
 	}
 	else 
 	{
-		m_log.setFooter(L"========COULDN'T COMPLETE MOVE JOB========");
+		m_log.setFooter("========COULDN'T COMPLETE MOVE JOB========");
 	}
 }
 
 void JobMove::addSummary()
 {
-	m_log += std::to_wstring(m_processedFiles) + L" files out of " + std::to_wstring(m_matchingFiles) + L" moved.";
+	m_log += QString::number(m_processedFiles) + " files out of " + QString::number(m_matchingFiles) + " moved.";
 }
 
-bool JobMove::processFile(const std::filesystem::directory_entry& de)
+bool JobMove::processFile(const QFileInfo& fileInfo)
 {
-	bool result = false;
-	try
+	QDir destinationFilePath = m_destinationDirectory;
+	QString filename = fileInfo.fileName();
+
+	int n = 1;
+	while (destinationFilePath.exists(filename))
 	{
-		std::filesystem::copy(de, m_destinationDirectory);
-	}
-	catch (const std::filesystem::filesystem_error& err)
-	{
-		std::cerr << "! System error: " << err.what() << std::endl;
-		return false;
+		filename = fileInfo.baseName() + " (" + QString::number(n) + ")." + fileInfo.completeSuffix();
+		n++;
 	}
 
-	try
-	{
-		result = std::filesystem::remove(de);
-	}
-
-	catch (const std::filesystem::filesystem_error& err)
-	{
-		std::cerr << "! System error: " << err.what() << std::endl;
-		return false;
-	}
+	bool result = QFile::copy(fileInfo.filePath(),
+		destinationFilePath.absolutePath() + QDir::separator() + filename);
 
 	if (result)
 	{
-		m_log += L"File " + de.path().filename().wstring() + L" moved to : " + m_destinationDirectory.wstring() + L'\n';
+		result = QFile::remove(fileInfo.filePath());
+
+		if (result)
+		{
+			m_log += "File " + fileInfo.fileName() + " moved to: " + m_destinationDirectory + '\n';
+		}
+		else
+		{
+			m_log += "Couldn't remove file: " + fileInfo.fileName() + '\n';
+		}
 	}
 	else
 	{
-		m_log += L"Couldn't remove file: " + de.path().filename().wstring() + L'\n';
+		qDebug() << "Failed to copy file: " << fileInfo.filePath();
 	}
 
 	return result;
 }
-
-void JobMove::setDestinationPath(const std::filesystem::path& path)
+void JobMove::setDestinationPath(const QString& path)
 {
 	m_destinationDirectory = path;
 }
 
-const std::filesystem::path& JobMove::getDestinationPath() const
+const QString& JobMove::getDestinationPath() const
 {
 	return m_destinationDirectory;
 }

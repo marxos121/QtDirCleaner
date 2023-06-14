@@ -1,6 +1,8 @@
 #include "JobRemove.h"
 
 #include <iostream>
+#include <qfileinfo.h>
+#include <qfile.h>
 
 JobRemove::JobRemove()
 	: JobBase(JobType::Remove)
@@ -10,49 +12,41 @@ JobRemove::JobRemove()
 
 void JobRemove::setHeaderPending()
 {
-	m_log += L"========REMOVE JOB PENDING========";
+	m_log += "========REMOVE JOB PENDING========";
 }
 
 void JobRemove::setHeaderStarted()
 {
-	m_log.setHeader(L"========REMOVE JOB STARTED========");
+	m_log.setHeader("========REMOVE JOB STARTED========");
 }
 
 void JobRemove::addFooter()
 {
 	if (m_isFinished) {
-		m_log += L"========REMOVE JOB COMPLETE========";
+		m_log += "========REMOVE JOB COMPLETE========";
 	}
 	else {
-		m_log += L"========COULDN'T COMPLETE REMOVE JOB========";
+		m_log += "========COULDN'T COMPLETE REMOVE JOB========";
 	}
 }
 
 void JobRemove::addSummary()
 {
-	m_log += std::to_wstring(m_processedFiles) + L" files out of " + std::to_wstring(m_matchingFiles) + L" removed.\n\n";
+	m_log += QString::number(m_processedFiles) + " files out of " + QString::number(m_matchingFiles) + " removed.\n\n";
 }
 
-bool JobRemove::processFile(const std::filesystem::directory_entry& de)
+bool JobRemove::processFile(const QFileInfo& file)
 {
 	bool result = false;
-	try
-	{
-		result = std::filesystem::remove(de);
-	}
-	catch (const std::filesystem::filesystem_error& err)
-	{
-		std::cerr << "! System error: " << err.what() << std::endl;
-		return false;
-	}
+	result = QFile::remove(file.absoluteFilePath());
 
 	if (result)
 	{
-		m_log += L"File removed: " + de.path().filename().wstring() + L'\n';
+		m_log += "File removed: " + file.path() + L'\n';
 	}
 	else
 	{
-		m_log += L"Couldn't remove file: " + de.path().filename().wstring() + L'\n';
+		m_log += "Couldn't remove file: " + file.path() + L'\n';
 	}
 
 	return result;

@@ -13,5 +13,5 @@ protected:
 	virtual void addFooter() override;
 	virtual void addSummary() override;
 
-	virtual bool processFile(const std::filesystem::directory_entry& de) override;
+	virtual bool processFile(const QFileInfo& file) override;
 };

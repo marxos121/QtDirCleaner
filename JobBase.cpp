@@ -1,40 +1,39 @@
 #include "JobBase.h"
 
-#include <sstream>
+#include <qdir.h>
+#include <qlist.h>
 #include <iostream>
-#include <fstream>
 #include <chrono>
 
 
 JobBase::JobBase(JobType l_type)
-    :  m_type(l_type), m_isFinished(false), m_matchingFiles(0), m_processedFiles(0)
+    : m_type(l_type), m_isFinished(false), m_matchingFiles(0), m_processedFiles(0)
 {
 }
 
 
 void JobBase::saveLog() const
 {
-    const std::chrono::time_point now{ std::chrono::system_clock::now() };
-    const std::chrono::year_month_day ymd{ std::chrono::floor<std::chrono::days>(now) };
-    const std::chrono::hh_mm_ss hhmmss{ std::chrono::floor<std::chrono::milliseconds>(now -
-        std::chrono::floor<std::chrono::days>(now)) };
-    
-    std::wstringstream logname;
-    logname << ymd << " " << hhmmss.hours() << "-" << hhmmss.minutes() << "-" << hhmmss.seconds();
+    const auto date = QDate::currentDate();
+    QString logname = QString("%1 %2-%3.dlog")
+        .arg(Qt::ISODate)
+        .arg(QDateTime::currentDateTime().time().hour())
+        .arg(QDateTime::currentDateTime().time().minute());
     createLogDirectory();
 
-    //If LOG_DIRECTORY contains an absolute path, then use it; otherwise append to current path
-    std::filesystem::path logPath =
-        (LOG_DIRECTORY.string().length() > 1 && LOG_DIRECTORY.string()[1] == ':' ?
-            LOG_DIRECTORY
-            : std::filesystem::current_path() / LOG_DIRECTORY) / (logname.str() + L".dlog");
-    m_log.save(logPath);
+    // If LOG_DIRECTORY contains an absolute path, then use it; otherwise, append to the current path
+    QString logPath = (LOG_DIRECTORY.length() > 1 && LOG_DIRECTORY[1] == ':') ?
+        LOG_DIRECTORY :
+        QDir::currentPath() + QDir::separator() + LOG_DIRECTORY;
+    logPath = logPath + QDir::separator() + logname + ".dlog";
+    ::saveLog(m_log, logPath);
 }
 
 bool JobBase::isReady() const
 {
     if (m_isFinished)
     {
+        std::cerr << "! Error! Job already finished." << std::endl;
         return false;
     }
 
@@ -63,37 +62,27 @@ void JobBase::execute()
     setHeaderStarted();
     addDescription();
 
-    for(const auto& dir : m_targetDirectories)
+    for (const auto& dir : m_targetDirectories)
     {
-        if (!std::filesystem::exists(dir))
+        if (!QDir(dir).exists())
         {
-            std::wcerr << "! Error! Specified target directory doesn't exist (" << dir << ")" << std::endl;
+            std::wcerr << "! Error! Specified target directory doesn't exist (" << dir.toStdWString() << ")" << std::endl;
             continue;
         }
 
-        else if (!std::filesystem::is_directory(dir))
+        for (const auto& file : QDir(dir).entryInfoList(QDir::Files))
         {
-            std::wcerr << "! Error! Specified target path is not a directory! (" << dir << ")" << std::endl;
-            continue;
-        }
+            auto path = file.absoluteFilePath();
+            const auto currExtension = "." + file.completeSuffix();
+            const auto currFilename = file.fileName();
 
-        for (auto& dirEntry : std::filesystem::directory_iterator(dir))
-        {
-            if (std::filesystem::is_directory(dirEntry))
-            {
-                continue;
-            }
-
-            const std::wstring currExtension = dirEntry.path().extension().wstring();
-            const std::wstring currFilename = dirEntry.path().filename().wstring();
-
-            if (m_targetExtensions.find(L".*") != m_targetExtensions.end()
-                || (m_targetExtensions.find(currExtension) != m_targetExtensions.end()
-                    && m_exemptFiles.find(currFilename) == m_exemptFiles.end()))
+            if ((m_targetExtensions.contains(".*") || m_targetExtensions.contains(currExtension)) 
+                && !m_exemptFiles.contains(currFilename) 
+                && !m_exemptFiles.contains(path))
             {
                 ++m_matchingFiles;
 
-                if (processFile(dirEntry))
+                if (processFile(file))
                 {
                     ++m_processedFiles;
                 }
@@ -103,82 +92,98 @@ void JobBase::execute()
 
     addSummary();
 
-    m_isFinished = m_matchingFiles == m_processedFiles;
+    m_isFinished = (m_matchingFiles == m_processedFiles);
 
     addFooter();
 }
 
 void JobBase::createLogDirectory() const
 {
-    if (std::filesystem::exists(LOG_DIRECTORY)) {
-        return;
+    QDir dir(LOG_DIRECTORY);
+    if (!dir.exists())
+    {
+        if (!dir.mkpath("."))
+        {
+            std::cerr << "! Error! Failed to create log directory." << std::endl;
+        }
     }
-    std::filesystem::create_directory(LOG_DIRECTORY);
 }
 
 void JobBase::clearLog()
 {
-    m_log.clearContent();
+    clearLogContent(m_log);
 }
 
 void JobBase::addDescription()
 {
-    m_log += L"Target folder(s):\n";
+    m_log += "Target folder(s):\n";
     for (const auto& dir : m_targetDirectories)
     {
-        m_log += dir.wstring() + L"\n";
+        m_log += dir + "\n";
     }
 
-    m_log += L"\nTarget extension(s): ";
+    m_log += "\nTarget extension(s): ";
     for (const auto& ext : m_targetExtensions)
     {
-        m_log += ext + L" ";
+        m_log += ext + " ";
     }
-    m_log += L"\n";
+    m_log += "\n";
 }
 
 // ========== Setters and Getters ==========
-JobType JobBase::getType() const {
+JobType JobBase::getType() const
+{
     return m_type;
 }
 
-const Log<wchar_t>& JobBase::getLog() const {
+const QtLog& JobBase::getLog() const
+{
     return m_log;
 }
 
-void JobBase::setFinished(bool finished) {
+void JobBase::setFinished(bool finished)
+{
     m_isFinished = finished;
 }
 
-bool JobBase::getFinished() const {
+bool JobBase::getFinished() const
+{
     return m_isFinished;
 }
 
-void JobBase::addTargetDirectory(const std::filesystem::path& path) {
-    m_targetDirectories.emplace(path);
-}
-
-void JobBase::removeTargetDirectory(const std::filesystem::path& l_path)
+void JobBase::setTargetDirectories(const QStringList& l_directories)
 {
-    m_targetDirectories.erase(l_path);
+    m_targetDirectories = QSet<QString>(l_directories.begin(), l_directories.end());
 }
 
-const std::unordered_set<std::filesystem::path>& JobBase::getTargetDirectories() const {
+void JobBase::addTargetDirectory(const QString& path)
+{
+    m_targetDirectories.insert(path);
+}
+
+void JobBase::removeTargetDirectory(const QString& path)
+{
+    m_targetDirectories.remove(path);
+}
+
+const QSet<QString>& JobBase::getTargetDirectories() const
+{
     return m_targetDirectories;
 }
 
-void JobBase::setTargetExtensions(const std::initializer_list<std::wstring>& extensions) {
-    m_targetExtensions = extensions;
+void JobBase::setTargetExtensions(const QStringList& l_extensions)
+{
+    m_targetExtensions = QSet<QString>(l_extensions.begin(), l_extensions.end());
 }
 
-void JobBase::addTargetExtension(const std::wstring& l_extension)
+void JobBase::addTargetExtension(const QString& extension)
 {
-    m_targetExtensions.emplace(l_extension);
+    m_targetExtensions.insert(extension);
 }
 
-void JobBase::removeTargetExtension(const std::wstring& l_extension)
+void JobBase::removeTargetExtension(const QString& extension)
 {
-    m_targetExtensions.erase(l_extension);
+    m_targetExtensions.remove(extension);
 }
 
 void JobBase::clearTargetExtensions()
@@ -186,31 +191,32 @@ void JobBase::clearTargetExtensions()
     m_targetExtensions.clear();
 }
 
-const std::unordered_set<std::wstring>& JobBase::getTargetExtensions() const {
+const QSet<QString>& JobBase::getTargetExtensions() const
+{
     return m_targetExtensions;
 }
 
-void JobBase::setExemptFiles(const std::initializer_list<std::wstring>& l_exemptions)
+void JobBase::setExemptFiles(const QStringList& l_exemptions)
 {
-    m_exemptFiles = l_exemptions;
+    m_exemptFiles = QSet<QString>(l_exemptions.begin(), l_exemptions.end());;
 }
 
-void JobBase::addExemptFile(const std::wstring& l_filename)
+void JobBase::addExemptFile(const QString& filename)
 {
-    m_exemptFiles.emplace(l_filename);
+    m_exemptFiles.insert(filename);
 }
 
-void JobBase::removeExemptFile(const std::wstring& l_filename)
+void JobBase::removeExemptFile(const QString& filename)
 {
-    m_exemptFiles.erase(l_filename);
+    m_exemptFiles.remove(filename);
 }
 
-const std::unordered_set<std::wstring>& JobBase::getExemptFiles() const
+const QSet<QString>& JobBase::getExemptFiles() const
 {
     return m_exemptFiles;
 }
 
-bool JobBase::isExempt(const std::wstring& l_filename) const
+bool JobBase::isExempt(const QString& filename) const
 {
-    return m_exemptFiles.find(l_filename) != m_exemptFiles.end();
+    return m_exemptFiles.contains(filename);
 }

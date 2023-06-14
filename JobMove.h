@@ -16,13 +16,13 @@ protected:
 	virtual void addFooter() override;
 	virtual void addSummary() override;
 
-	virtual bool processFile(const std::filesystem::directory_entry& de) override;
+	virtual bool processFile(const QFileInfo& de) override;
 
 private:
-	std::filesystem::path m_destinationDirectory;
+	QString m_destinationDirectory;
 
 public:
 	//Setters and getters
-	void setDestinationPath(const std::filesystem::path& path);
-	const std::filesystem::path& getDestinationPath() const;
+	void setDestinationPath(const QString& path);
+	const QString& getDestinationPath() const;
 };
