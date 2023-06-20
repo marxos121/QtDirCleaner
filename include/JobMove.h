@@ -7,19 +7,17 @@ public:
 	JobMove();
 	~JobMove() = default;
 
-	virtual bool isReady() const override;
-
 protected:
+	bool isReady() const override;
 	virtual void setHeaderPending() override;
 	virtual void setHeaderStarted() override;
 	virtual void addDescription() override;
 	virtual void addFooter() override;
 	virtual void addSummary() override;
 
-	virtual bool processFile(const QFileInfo& de) override;
-
 private:
 	QString m_destinationDirectory;
+	virtual bool processFile(const QFileInfo& de) override;
 
 public:
 	//Setters and getters

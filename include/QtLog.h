@@ -18,7 +18,6 @@ private:
 
 public:
 	// ========== Setters and Getters ==========
-	QString getAll(const QString& separator = "\n\n") const;
 	const QString& getContent() const;
 	const QString& getHeader() const;
 	const QString& getFooter() const;
@@ -27,7 +26,3 @@ public:
 	void setHeader(const QString& l_header);
 	void setFooter(const QString& l_footer);
 };
-
-void clearLogContent(QtLog& log);
-void saveLog(const QtLog& log, const QString& l_path = "log.dlog");
-void appendAsContent(QtLog& to, const QtLog& from);

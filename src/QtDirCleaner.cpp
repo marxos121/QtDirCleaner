@@ -1,8 +1,11 @@
-#include "../include/Columns.h"
 #include "../include/QtDirCleaner.h"
+
+#include "../include/Columns.h"
 #include "../include/JobEditDialog.h"
 #include "../include/JobAddDialog.h"
 #include "../include/JobBase.h"
+#include "../include/JobBlueprint.h"
+#include "../include/BlueprintUtilities.h"
 
 #include <qheaderview.h>
 #include <QBoxLayout>
@@ -17,9 +20,9 @@ QtDirCleaner::QtDirCleaner(QWidget *parent)
     setWindowTitle("DirCleaner");
     resize(1000, 700);
 
-    auto model = new QStandardItemModel(this);
-    m_table->setModel(model);    //should i use "this"?
-    model->setHorizontalHeaderLabels({
+    m_model = new QStandardItemModel(this);
+    m_table->setModel(m_model);    //should i use "this"?
+    m_model->setHorizontalHeaderLabels({
         columnHeaders(CleanModelColumns::Type),
         columnHeaders(CleanModelColumns::Extensions),
         columnHeaders(CleanModelColumns::TargetDirs),
@@ -81,21 +84,20 @@ void QtDirCleaner::onRemoveClick()
     auto curr = selection->currentIndex();
     if (curr.isValid())
     {
-        m_table->model()->removeRow(curr.row());
+        m_model->removeRow(curr.row());
     }
 
-    m_executeAllButton->setDisabled(m_table->model()->rowCount() == 0);
+    m_executeAllButton->setDisabled(m_model->rowCount() == 0);
 }
 
 void QtDirCleaner::onExecuteSelectedClick()
 {
     auto selection = m_table->selectionModel();
     auto curr = selection->currentIndex();
-    auto model = static_cast<QStandardItemModel*>(m_table->model());
     if (curr.isValid())
     {
-        auto blueprint = blueprintFromModel(*model, curr.row());
-        auto job = createJob(blueprint);
+        auto blueprint = Utilities::blueprintFromModel(*m_model, curr.row());
+        auto job = Utilities::createJob(blueprint);
         if (job) 
         {
             job->execute();
@@ -105,11 +107,10 @@ void QtDirCleaner::onExecuteSelectedClick()
 
 void QtDirCleaner::onExecuteAllClick()
 {
-    auto model = static_cast<QStandardItemModel*>(m_table->model());
-    for (int i = 0; i < model->rowCount(); ++i)
+    for (int i = 0; i < m_model->rowCount(); ++i)
     {
-        auto blueprint = blueprintFromModel(*model, i);
-        auto job = createJob(blueprint);
+        auto blueprint = Utilities::blueprintFromModel(*m_model, i);
+        auto job = Utilities::createJob(blueprint);
         if (job)
         {
             job->execute();
@@ -125,16 +126,15 @@ void QtDirCleaner::onAddClick()
     {
         return;
     }
-
-    static_cast<QStandardItemModel*>(m_table->model())->appendRow(dialog.getList());
+    
+    m_model->appendRow(dialog.getList());
     m_executeAllButton->setEnabled(true);
 }
 
 void QtDirCleaner::onEditClick()
 {
     JobEditDialog dialog(this);
-    dialog.openForEdit(static_cast<QStandardItemModel*>(m_table->model()),
-        m_table->selectionModel()->currentIndex().row());
+    dialog.openForEdit(m_model, m_table->selectionModel()->currentIndex().row());
     dialog.exec();
 }
 

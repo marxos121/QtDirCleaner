@@ -2,7 +2,6 @@
 
 #include "../include/QtLog.h"
 
-#include <qstring.h>
 #include <qset.h>
 
 class QFileInfo;
@@ -12,26 +11,6 @@ enum class JobType
     Move, Remove
 };
 
-inline QString to_string(JobType type)
-{
-    return type == JobType::Move ? "Move" : 
-        (type == JobType::Remove ? "Remove" : "Error");
-}
-
-
-inline JobType strToJobType(const QString& type)
-{
-    if (type.toLower() == "move") {
-        return JobType::Move;
-    }
-
-    if (type.toLower() == "remove") {
-        return JobType::Remove;
-    }
-
-    return (JobType)-1;
-}
-
 class JobBase {
 public:
     JobBase(JobType l_type);
@@ -39,20 +18,23 @@ public:
 
     void execute();
 
-    void saveLog() const;
-    virtual bool isReady() const;
-
-protected:
-	QSet<QString> m_targetDirectories;
-    QSet<QString> m_targetExtensions;
-    QSet<QString> m_exemptFiles;
+private:
+    const JobType m_type;
+    bool m_isFinished;  //maybe change to enum class Status { pending, started, finished 
 
     int m_processedFiles;
     int m_matchingFiles;
-    bool m_isFinished;  //maybe change to enum class Status { pending, started, finished }
+
+    QSet<QString> m_targetDirectories;
+    QSet<QString> m_targetExtensions;
+    QSet<QString> m_exemptFiles;
+
+    virtual bool processFile(const QFileInfo& de) = 0;
+
+protected:
+    virtual bool isReady() const;
     QtLog m_log;
 
-    void createLogDirectory() const;
     void clearLog();
     virtual void setHeaderPending() = 0;
     virtual void setHeaderStarted() = 0;
@@ -60,19 +42,12 @@ protected:
     virtual void addFooter() = 0;
     virtual void addSummary() = 0;
 
-    virtual bool processFile(const QFileInfo& de) = 0;
-
-private:
-    //For internal use only
-    const QString LOG_DIRECTORY = "logs";
-    const JobType m_type;
 
 public: 
     // ========== Setters and Getters ==========
     JobType getType() const;
     const QtLog& getLog() const;
 
-    void setFinished(bool l_finished);
     bool getFinished() const;
 
     void setTargetDirectories(const QStringList& L_directories);
@@ -91,4 +66,7 @@ public:
     void removeExemptFile(const QString& l_filename);
     const QSet<QString>& getExemptFiles() const;
     bool isExempt(const QString& l_filename) const;
+
+    int getMatchingFiles() const;
+    int getProcessedFiles() const;
 };

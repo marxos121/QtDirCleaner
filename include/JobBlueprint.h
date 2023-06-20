@@ -1,15 +1,7 @@
 #pragma once
-#include "../include/JobMove.h"
-#include "../include/JobRemove.h"
-
-#include <vector>
 #include <qstringlist.h>
-#include <memory>
-#include <optional>
 
-class QStandardItemModel;
-class QStandardItem;
-
+enum class JobType;
 
 struct JobBlueprint
 {
@@ -19,8 +11,3 @@ struct JobBlueprint
 	QStringList exemptFiles;
 	QString moveDestination;
 };
-
-
-JobBlueprint blueprintFromModel(const QStandardItemModel& model, int row);
-QList<QStandardItem*> blueprintToQList(const JobBlueprint& bp);
-std::shared_ptr<JobBase> createJob(const JobBlueprint& bp);

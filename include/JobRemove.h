@@ -13,5 +13,6 @@ protected:
 	virtual void addFooter() override;
 	virtual void addSummary() override;
 
+private:
 	virtual bool processFile(const QFileInfo& file) override;
 };

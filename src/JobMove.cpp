@@ -1,35 +1,12 @@
 #include "../include/JobMove.h"
+#include "../include/Utilities.h"
 
-#include <iostream>
 #include <qdir.h>
 
 JobMove::JobMove()
 	: JobBase(JobType::Move)
 {
 	setHeaderPending();
-}
-
-bool JobMove::isReady() const
-{
-	bool valid = JobBase::isReady();
-
-	QDir dir(m_destinationDirectory);
-	if (!dir.exists()) 
-	{
-		bool res = dir.mkpath(".");
-
-		if (!res)
-		{
-			std::wcerr << "! Error! could not create a directory! (" << m_destinationDirectory.toStdWString() << ")" << std::endl;
-		}
-	}
-	else if (!QFileInfo(dir.path()).isDir())
-	{
-		std::wcerr << "! Error! Specified destination path is not a directory! (" << m_destinationDirectory.toStdWString() << ")" << std::endl;
-		valid = false;
-	}
-
-	return valid;
 }
 
 void JobMove::setHeaderPending()
@@ -50,7 +27,7 @@ void JobMove::addDescription()
 
 void JobMove::addFooter()
 {
-	if (m_isFinished) 
+	if (getFinished()) 
 	{
 		m_log.setFooter("========MOVE JOB COMPLETE========");
 	}
@@ -62,7 +39,7 @@ void JobMove::addFooter()
 
 void JobMove::addSummary()
 {
-	m_log += QString::number(m_processedFiles) + " files out of " + QString::number(m_matchingFiles) + " moved.";
+	m_log += QString::number(getProcessedFiles()) + " files out of " + QString::number(getMatchingFiles()) + " moved.";
 }
 
 bool JobMove::processFile(const QFileInfo& fileInfo)
@@ -77,29 +54,29 @@ bool JobMove::processFile(const QFileInfo& fileInfo)
 		n++;
 	}
 
-	bool result = QFile::copy(fileInfo.filePath(),
-		destinationFilePath.absolutePath() + QDir::separator() + filename);
-
-	if (result)
+	if (QFile::copy(fileInfo.filePath(),
+		destinationFilePath.absolutePath() + QDir::separator() + filename))
 	{
-		result = QFile::remove(fileInfo.filePath());
-
-		if (result)
+		if (QFile::remove(fileInfo.filePath()))
 		{
 			m_log += "File " + fileInfo.fileName() + " moved to: " + m_destinationDirectory + '\n';
+			return true;
 		}
 		else
 		{
 			m_log += "Couldn't remove file: " + fileInfo.fileName() + '\n';
+			return false;
 		}
 	}
-	else
-	{
-		qDebug() << "Failed to copy file: " << fileInfo.filePath();
-	}
-
-	return result;
+	m_log += "Failed to copy file: " + fileInfo.filePath();
+	return false;
 }
+
+bool JobMove::isReady() const
+{
+	return JobBase::isReady() && !m_destinationDirectory.isEmpty();
+}
+
 void JobMove::setDestinationPath(const QString& path)
 {
 	m_destinationDirectory = path;

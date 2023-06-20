@@ -1,8 +1,5 @@
 #include "../include/QtLog.h"
 
-#include <qfile.h>
-#include <qtextstream.h>
-
 QtLog& QtLog::operator+=(const char* rhs)
 {
     return *this += QString(rhs);
@@ -43,11 +40,6 @@ void QtLog::setFooter(const QString& l_footer) {
 }
 
 // ========== Getter functions ==========
-QString QtLog::getAll(const QString& separator) const {
-    return (m_header.isEmpty() ? m_header : m_header + separator)
-        + m_content +
-        (m_footer.isEmpty() ? m_footer : separator + m_footer);
-}
 
 const QString& QtLog::getContent() const {
     return m_content;
@@ -74,24 +66,4 @@ QtLog operator+(const QtLog& log, const QChar* str)
     QtLog temp(log);
     temp += str;
     return temp;
-}
-
-void appendAsContent(QtLog& to, const QtLog& from)
-{
-    to.appendContent(from.getAll());
-}
-
-void clearLogContent(QtLog& log)
-{
-    log.setContent("");
-}
-
-void saveLog(const QtLog& log, const QString& l_path)
-{
-    QFile file(l_path);
-    if (file.open(QIODeviceBase::WriteOnly))
-    {
-        QTextStream out{ &file };
-        out << log.getAll();
-    }
 }

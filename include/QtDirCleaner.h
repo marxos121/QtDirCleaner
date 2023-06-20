@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QWidget>
 
+class QStandardItemModel;
 class QTableView;
 class QPushButton;
 
@@ -15,6 +16,8 @@ public:
 
 private:
     QTableView* m_table;
+    QStandardItemModel* m_model;
+
     QPushButton* m_editButton; 
     QPushButton* m_removeButton;
     QPushButton* m_executeSelectedButton;

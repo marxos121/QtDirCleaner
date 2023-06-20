@@ -1,9 +1,14 @@
 #include "../include/JobBlueprint.h"
+#include "../include/BlueprintUtilities.h"
 #include "../include/Columns.h"
+#include "../include/Utilities.h"
+#include "../include/JobMove.h"
+#include "../include/JobRemove.h"
 
 #include <qstandarditemmodel.h>
+#include <memory>
 
-JobBlueprint blueprintFromModel(const QStandardItemModel& model, int row)
+JobBlueprint Utilities::blueprintFromModel(const QStandardItemModel& model, int row)
 {
 	JobBlueprint ret;
 	if (!model.index(row, 0).isValid())
@@ -11,7 +16,7 @@ JobBlueprint blueprintFromModel(const QStandardItemModel& model, int row)
 		return ret;
 	}
 
-	ret.type = strToJobType(model.data(model.index(row, CleanModelColumns::Type)).toString());
+	ret.type = Utilities::strToJobType(model.data(model.index(row, CleanModelColumns::Type)).toString());
 	ret.targetDirectories = model.data(model.index(row, CleanModelColumns::TargetDirs)).toString().split("; ");
 	ret.exemptFiles = model.data(model.index(row, CleanModelColumns::Exempt)).toString().split("; ");
 	ret.targetExtensions = model.data(model.index(row, CleanModelColumns::Extensions)).toString().split("; ");
@@ -21,10 +26,10 @@ JobBlueprint blueprintFromModel(const QStandardItemModel& model, int row)
 	return ret;
 }
 
-QList<QStandardItem*> blueprintToQList(const JobBlueprint& bp)
+QList<QStandardItem*> Utilities::blueprintToQList(const JobBlueprint& bp)
 {
 	QList<QStandardItem*> ret;
-	ret.append(new QStandardItem(to_string(bp.type)));
+	ret.append(new QStandardItem(Utilities::to_string(bp.type)));
 
 	auto to_string = [](const QStringList& list) -> QString {
 		QString result;
@@ -46,7 +51,7 @@ QList<QStandardItem*> blueprintToQList(const JobBlueprint& bp)
 	return ret;
 }
 
-std::shared_ptr<JobBase> createJob(const JobBlueprint& bp)
+std::shared_ptr<JobBase> Utilities::createJob(const JobBlueprint& bp)
 {
 	if (bp.type == JobType(-1))
 	{

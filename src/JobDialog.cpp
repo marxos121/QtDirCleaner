@@ -3,15 +3,13 @@
 #include "../include/DirListDelegate.h"
 #include "../include/DirListView.h"
 
-#include <qtimer.h>
 #include <qtoolbutton.h>
 #include <qlistview.h>
-#include <QComboBox>
+#include <qcombobox.h>
 #include <QMouseEvent>
-#include <QBoxLayout>
+#include <qboxlayout.h>
 #include <qpushbutton.h>
-#include <QLabel>
-#include <qstandarditemmodel.h>
+#include <qlabel.h>
 #include <qitemselectionmodel.h>
 #include <qstringlistmodel.h>
 

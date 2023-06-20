@@ -1,8 +1,6 @@
 #include "../include/JobRemove.h"
 
-#include <iostream>
 #include <qfileinfo.h>
-#include <qfile.h>
 
 JobRemove::JobRemove()
 	: JobBase(JobType::Remove)
@@ -22,7 +20,7 @@ void JobRemove::setHeaderStarted()
 
 void JobRemove::addFooter()
 {
-	if (m_isFinished) {
+	if (getFinished()) {
 		m_log += "========REMOVE JOB COMPLETE========";
 	}
 	else {
@@ -32,22 +30,19 @@ void JobRemove::addFooter()
 
 void JobRemove::addSummary()
 {
-	m_log += QString::number(m_processedFiles) + " files out of " + QString::number(m_matchingFiles) + " removed.\n\n";
+	m_log += QString::number(getProcessedFiles()) + " files out of " + QString::number(getMatchingFiles()) + " removed.\n\n";
 }
 
 bool JobRemove::processFile(const QFileInfo& file)
 {
-	bool result = false;
-	result = QFile::remove(file.absoluteFilePath());
-
-	if (result)
+	if (QFile::remove(file.absoluteFilePath()))
 	{
 		m_log += "File removed: " + file.path() + L'\n';
+		return true;
 	}
 	else
 	{
 		m_log += "Couldn't remove file: " + file.path() + L'\n';
+		return false;
 	}
-
-	return result;
 }

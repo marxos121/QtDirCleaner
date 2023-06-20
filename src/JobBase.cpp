@@ -1,55 +1,10 @@
 #include "../include/JobBase.h"
-
+#include "../include/LogUtilities.h"
 #include <qdir.h>
-#include <qlist.h>
-#include <iostream>
-#include <chrono>
-
 
 JobBase::JobBase(JobType l_type)
     : m_type(l_type), m_isFinished(false), m_matchingFiles(0), m_processedFiles(0)
 {
-}
-
-
-void JobBase::saveLog() const
-{
-    const auto date = QDate::currentDate();
-    QString logname = QString("%1 %2-%3.dlog")
-        .arg(Qt::ISODate)
-        .arg(QDateTime::currentDateTime().time().hour())
-        .arg(QDateTime::currentDateTime().time().minute());
-    createLogDirectory();
-
-    // If LOG_DIRECTORY contains an absolute path, then use it; otherwise, append to the current path
-    QString logPath = (LOG_DIRECTORY.length() > 1 && LOG_DIRECTORY[1] == ':') ?
-        LOG_DIRECTORY :
-        QDir::currentPath() + QDir::separator() + LOG_DIRECTORY;
-    logPath = logPath + QDir::separator() + logname + ".dlog";
-    ::saveLog(m_log, logPath);
-}
-
-bool JobBase::isReady() const
-{
-    if (m_isFinished)
-    {
-        std::cerr << "! Error! Job already finished." << std::endl;
-        return false;
-    }
-
-    if (m_targetDirectories.empty())
-    {
-        std::cerr << "! Error! No target directory specified!" << std::endl;
-        return false;
-    }
-
-    if (m_targetExtensions.empty())
-    {
-        std::cerr << "! Error! No target extension specified!" << std::endl;
-        return false;
-    }
-
-    return true;
 }
 
 void JobBase::execute()
@@ -66,7 +21,7 @@ void JobBase::execute()
     {
         if (!QDir(dir).exists())
         {
-            std::wcerr << "! Error! Specified target directory doesn't exist (" << dir.toStdWString() << ")" << std::endl;
+            m_log += "! Error! Specified target directory doesn't exist (" + dir + ")\n";
             continue;
         }
 
@@ -74,10 +29,8 @@ void JobBase::execute()
         {
             auto path = file.absoluteFilePath();
             const auto currExtension = "." + file.completeSuffix();
-            const auto currFilename = file.fileName();
 
             if ((m_targetExtensions.contains(".*") || m_targetExtensions.contains(currExtension)) 
-                && !m_exemptFiles.contains(currFilename) 
                 && !m_exemptFiles.contains(path))
             {
                 ++m_matchingFiles;
@@ -97,21 +50,14 @@ void JobBase::execute()
     addFooter();
 }
 
-void JobBase::createLogDirectory() const
+bool JobBase::isReady() const
 {
-    QDir dir(LOG_DIRECTORY);
-    if (!dir.exists())
-    {
-        if (!dir.mkpath("."))
-        {
-            std::cerr << "! Error! Failed to create log directory." << std::endl;
-        }
-    }
+    return !(getFinished() || m_targetDirectories.empty() || m_targetExtensions.empty());;
 }
 
 void JobBase::clearLog()
 {
-    clearLogContent(m_log);
+    Utilities::clearLogContent(m_log);
 }
 
 void JobBase::addDescription()
@@ -139,11 +85,6 @@ JobType JobBase::getType() const
 const QtLog& JobBase::getLog() const
 {
     return m_log;
-}
-
-void JobBase::setFinished(bool finished)
-{
-    m_isFinished = finished;
 }
 
 bool JobBase::getFinished() const
@@ -219,4 +160,14 @@ const QSet<QString>& JobBase::getExemptFiles() const
 bool JobBase::isExempt(const QString& filename) const
 {
     return m_exemptFiles.contains(filename);
+}
+
+int JobBase::getMatchingFiles() const
+{
+    return m_matchingFiles;
+}
+
+int JobBase::getProcessedFiles() const
+{
+    return m_processedFiles;
 }

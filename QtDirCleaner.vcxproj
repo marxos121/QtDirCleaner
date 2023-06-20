@@ -11,12 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\BlueprintUtilities.h" />
     <ClInclude Include="include\Columns.h" />
     <ClInclude Include="include\JobBase.h" />
     <ClInclude Include="include\JobBlueprint.h" />
     <ClInclude Include="include\JobMove.h" />
     <ClInclude Include="include\JobRemove.h" />
+    <ClInclude Include="include\LogUtilities.h" />
     <ClInclude Include="include\QtLog.h" />
+    <ClInclude Include="include\Utilities.h" />
     <QtMoc Include="include\QtDirCleaner.h" />
     <QtMoc Include="include\JobEditDialog.h" />
     <QtMoc Include="include\JobDialog.h" />
@@ -36,9 +39,11 @@
     <ClCompile Include="src\JobEditDialog.cpp" />
     <ClCompile Include="src\JobMove.cpp" />
     <ClCompile Include="src\JobRemove.cpp" />
+    <ClCompile Include="src\LogUtilities.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\QtDirCleaner.cpp" />
     <ClCompile Include="src\QtLog.cpp" />
+    <ClCompile Include="src\Utilities.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9B439310-7F59-416F-A732-ED002A444E8B}</ProjectGuid>
@@ -61,7 +66,7 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>6.4.1_msvc2019_64</QtInstall>
+    <QtInstall>6.5.1_msvc2019_64</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>

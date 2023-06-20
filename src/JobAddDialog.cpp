@@ -2,7 +2,7 @@
 #include "../include/DirLineEdit.h"
 #include "../include/DirListView.h"
 
-#include <QStandardItem>
+#include <qstandarditem>
 #include <qcombobox.h>
 #include <qstringlistmodel.h>
 
