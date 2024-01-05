@@ -1,6 +1,5 @@
 #include "../include/QtDirCleaner.h"
 #include <QtWidgets/QApplication>
-#include <qstyle.h>
 
 int main(int argc, char *argv[])
 {

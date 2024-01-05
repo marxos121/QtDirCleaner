@@ -18,6 +18,7 @@
     <ClInclude Include="include\JobMove.h" />
     <ClInclude Include="include\JobRemove.h" />
     <ClInclude Include="include\LogUtilities.h" />
+    <QtMoc Include="include\LogWindow.h" />
     <ClInclude Include="include\QtLog.h" />
     <ClInclude Include="include\Utilities.h" />
     <QtMoc Include="include\QtDirCleaner.h" />
@@ -40,6 +41,7 @@
     <ClCompile Include="src\JobMove.cpp" />
     <ClCompile Include="src\JobRemove.cpp" />
     <ClCompile Include="src\LogUtilities.cpp" />
+    <ClCompile Include="src\LogWindow.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\QtDirCleaner.cpp" />
     <ClCompile Include="src\QtLog.cpp" />

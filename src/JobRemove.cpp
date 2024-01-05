@@ -10,7 +10,7 @@ JobRemove::JobRemove()
 
 void JobRemove::setHeaderPending()
 {
-	m_log += "========REMOVE JOB PENDING========";
+	m_log.setHeader("========REMOVE JOB PENDING========");
 }
 
 void JobRemove::setHeaderStarted()

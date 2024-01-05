@@ -6,6 +6,8 @@
 #include "../include/JobBase.h"
 #include "../include/JobBlueprint.h"
 #include "../include/BlueprintUtilities.h"
+#include "../include/LogWindow.h"
+#include "../include/LogUtilities.h"
 
 #include <qheaderview.h>
 #include <QBoxLayout>
@@ -101,12 +103,16 @@ void QtDirCleaner::onExecuteSelectedClick()
         if (job) 
         {
             job->execute();
+            LogWindow* lw = new LogWindow();
+            lw->loadLog(job->getLog());
+            lw->show();
         }
     }
 }
 
 void QtDirCleaner::onExecuteAllClick()
 {
+    QtLog totalLog;
     for (int i = 0; i < m_model->rowCount(); ++i)
     {
         auto blueprint = Utilities::blueprintFromModel(*m_model, i);
@@ -114,8 +120,12 @@ void QtDirCleaner::onExecuteAllClick()
         if (job)
         {
             job->execute();
+            Utilities::appendAsContent(totalLog, job->getLog());
         }
     }
+    LogWindow* lw = new LogWindow();
+    lw->loadLog(totalLog);
+    lw->show();
 }
 
 
